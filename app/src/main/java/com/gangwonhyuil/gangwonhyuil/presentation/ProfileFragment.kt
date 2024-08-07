@@ -32,6 +32,14 @@ class ProfileFragment : Fragment() {
             val intent = Intent(requireActivity(), SettingActivity::class.java)
             startActivity(intent)
         }
+        binding.tvMyReviewMore.setOnClickListener {
+            val intent = Intent(requireActivity(), MyReviewActivity::class.java)
+            startActivity(intent)
+        }
+        binding.tvMyPostMore.setOnClickListener {
+            val intent = Intent(requireActivity(), MyPostActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onDestroyView() {

@@ -2,16 +2,16 @@ package com.gangwonhyuil.gangwonhyuil.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.gangwonhyuil.gangwonhyuil.databinding.ActivitySettingBinding
+import com.gangwonhyuil.gangwonhyuil.databinding.ActivityMyPostBinding
 
-class SettingActivity : AppCompatActivity() {
+class MyPostActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySettingBinding
+    private lateinit var binding: ActivityMyPostBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivitySettingBinding.inflate(layoutInflater)
+        binding = ActivityMyPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         intiView()

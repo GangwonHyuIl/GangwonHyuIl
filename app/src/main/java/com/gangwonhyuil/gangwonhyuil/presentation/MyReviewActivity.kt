@@ -2,16 +2,16 @@ package com.gangwonhyuil.gangwonhyuil.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.gangwonhyuil.gangwonhyuil.databinding.ActivitySettingBinding
+import com.gangwonhyuil.gangwonhyuil.databinding.ActivityMyReviewBinding
 
-class SettingActivity : AppCompatActivity() {
+class MyReviewActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySettingBinding
+    private lateinit var binding: ActivityMyReviewBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivitySettingBinding.inflate(layoutInflater)
+        binding = ActivityMyReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         intiView()

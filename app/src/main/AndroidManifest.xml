@@ -11,14 +11,16 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
+        android:supportsRtl="false"
         android:theme="@style/Theme.GangwonHyuil"
         tools:targetApi="31">
+
         <activity
             android:name=".presentation.OnBodingActivity"
             android:exported="true" >
 
         </activity>
+
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true">
@@ -42,6 +44,13 @@
                     android:scheme="kakao83ed3419c90df461922f69facba26d20" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".presentation.SettingActivity"
+            android:exported="true" >
+
+        </activity>
+
     </application>
 
 </manifest>

@@ -2,4 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="left_balloon">#7AC31F</color>
+    <color name="right_balloon">#1F7AC3</color>
 </resources>

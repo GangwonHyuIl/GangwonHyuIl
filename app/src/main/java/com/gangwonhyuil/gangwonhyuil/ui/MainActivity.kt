@@ -1,10 +1,14 @@
-package com.gangwonhyuil.gangwonhyuil.presentation
+package com.gangwonhyuil.gangwonhyuil.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivityMainBinding
+import com.gangwonhyuil.gangwonhyuil.ui.ai.AiFragment
+import com.gangwonhyuil.gangwonhyuil.ui.community.CommunityFragment
+import com.gangwonhyuil.gangwonhyuil.ui.home.HomeFragment
+import com.gangwonhyuil.gangwonhyuil.ui.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {

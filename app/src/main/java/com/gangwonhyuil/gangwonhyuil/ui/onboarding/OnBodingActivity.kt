@@ -1,4 +1,4 @@
-package com.gangwonhyuil.gangwonhyuil.presentation
+package com.gangwonhyuil.gangwonhyuil.ui.onboarding
 
 import android.content.ContentValues.TAG
 import android.content.Context

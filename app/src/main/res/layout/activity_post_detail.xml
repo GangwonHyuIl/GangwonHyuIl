@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.community.postDetail.PostDetailActivity">
+    tools:context=".ui.community.screen.postDetail.PostDetailActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:layout_width="match_parent"

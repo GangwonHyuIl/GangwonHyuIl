@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textSize="22sp"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ly_writer_info"
             tools:text="춘천에 7박 8일로 다녀온 워케이션 정보 공유합니다~" />

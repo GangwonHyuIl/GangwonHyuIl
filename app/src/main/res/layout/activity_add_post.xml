@@ -29,7 +29,7 @@
             android:minHeight="48dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="null"
+            android:background="@null"
             android:hint="게시글 내용을 입력해 주세요"
             android:textSize="20sp" />
     </LinearLayout>

@@ -140,7 +140,7 @@
             android:id="@+id/et_post_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="null"
+            android:background="@null"
             android:hint="장소에 대한 설명을 입력해 주세요"
             android:textSize="18sp" />
     </LinearLayout>

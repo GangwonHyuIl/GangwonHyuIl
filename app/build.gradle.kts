@@ -77,5 +77,6 @@ dependencies {
     // 통합 테스트
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.coil)
 
 }

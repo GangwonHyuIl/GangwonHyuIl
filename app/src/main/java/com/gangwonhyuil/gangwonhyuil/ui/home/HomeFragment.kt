@@ -1,4 +1,4 @@
-package com.gangwonhyuil.gangwonhyuil.presentation
+package com.gangwonhyuil.gangwonhyuil.ui.home
 
 import android.content.Intent
 import android.os.Bundle

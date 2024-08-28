@@ -1,4 +1,4 @@
-package com.gangwonhyuil.gangwonhyuil.presentation
+package com.gangwonhyuil.gangwonhyuil.ui.ai
 
 import android.os.Bundle
 import android.util.Log
@@ -10,10 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gangwonhyuil.gangwonhyuil.BuildConfig
 import com.gangwonhyuil.gangwonhyuil.R
-import com.gangwonhyuil.gangwonhyuil.data.remote.gemini.AiAdapter
-import com.gangwonhyuil.gangwonhyuil.data.remote.kakaoLogin.Chating
+//import com.gangwonhyuil.gangwonhyuil.data.remote.gemini.AiAdapter
+//import com.gangwonhyuil.gangwonhyuil.data.remote.kakaoLogin.Chating
 import com.gangwonhyuil.gangwonhyuil.databinding.FragmentAiBinding
-import com.gangwonhyuil.gangwonhyuil.domain.repository.AiViewModel
+//import com.gangwonhyuil.gangwonhyuil.domain.repository.AiViewModel
 import com.google.ai.client.generativeai.GenerativeModel
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime

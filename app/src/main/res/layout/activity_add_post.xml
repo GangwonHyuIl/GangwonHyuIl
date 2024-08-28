@@ -28,7 +28,7 @@
             android:id="@+id/et_post_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="null"
+            android:background="@null"
             android:hint="게시글 내용을 입력해 주세요"
             android:textSize="20sp" />
     </LinearLayout>
@@ -41,7 +41,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:itemCount="2"
         tools:listitem="@layout/rv_item_add_post_header" />
-    <?xml version="1.0" encoding="utf-8"?>
+
     <LinearLayout
         android:id="@+id/ly_add_place"
         android:layout_width="match_parent"

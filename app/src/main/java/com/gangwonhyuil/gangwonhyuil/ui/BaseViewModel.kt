@@ -1,6 +1,5 @@
 package com.gangwonhyuil.gangwonhyuil.ui
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -8,9 +7,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 
-abstract class BaseViewModel(
-    private val savedStateHandle: SavedStateHandle,
-) : ViewModel() {
+abstract class BaseViewModel() : ViewModel() {
     private val _exceptions: MutableSharedFlow<Exception> = MutableSharedFlow()
 
     private val exceptionHandler =

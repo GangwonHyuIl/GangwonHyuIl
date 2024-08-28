@@ -5,15 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.FragmentCommunityBinding
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 interface OnPostItemClickListener {
     fun onPostItemClick(id: Long)
@@ -37,12 +36,13 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(), OnPostItemCl
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initAdapter()
+        initPlaceItemRecyclerView()
         initViewModelObserver()
     }
 
-    private fun initAdapter() {
+    private fun initPlaceItemRecyclerView() {
         placeItemAdapter = PlaceItemAdapter(this@CommunityFragment)
+        binding.rvPost.adapter = placeItemAdapter
     }
 
     private fun initViewModelObserver() {
@@ -55,6 +55,6 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(), OnPostItemCl
 
     override fun onPostItemClick(id: Long) {
         // TODO: start post detail activity
-        Toast.makeText(requireContext(), "id: $id", Toast.LENGTH_SHORT).show()
+        Timber.d("post item clicked) id: ${id}")
     }
 }

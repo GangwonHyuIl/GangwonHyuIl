@@ -16,7 +16,6 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = inflateBinding(inflater, container)
         val root: View = binding.root
 

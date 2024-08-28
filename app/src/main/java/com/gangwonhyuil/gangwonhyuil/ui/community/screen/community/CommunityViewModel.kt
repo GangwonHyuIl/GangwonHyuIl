@@ -12,11 +12,11 @@ import javax.inject.Inject
 @HiltViewModel
 class CommunityViewModel @Inject constructor(
     private val getPostItems: GetPostItemsUseCase
-) : BaseViewModel(){
+) : BaseViewModel() {
     private val _postItems = MutableStateFlow<List<PostItem>>(emptyList())
     val postItems = _postItems.asStateFlow()
 
-    init{
+    init {
         viewModelScopeEH.launch {
             _postItems.update { getPostItems() }
         }

@@ -6,11 +6,13 @@ import androidx.fragment.app.Fragment
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivityMainBinding
 import com.gangwonhyuil.gangwonhyuil.ui.ai.AiFragment
-import com.gangwonhyuil.gangwonhyuil.ui.community.CommunityFragment
+import com.gangwonhyuil.gangwonhyuil.ui.community.screen.community.CommunityFragment
 import com.gangwonhyuil.gangwonhyuil.ui.home.HomeFragment
 import com.gangwonhyuil.gangwonhyuil.ui.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -31,7 +33,8 @@ class MainActivity : AppCompatActivity() {
 
 
 //        바텀 네비
-        supportFragmentManager.beginTransaction().add(binding.navHostFragment.id, HomeFragment()).commit()
+        supportFragmentManager.beginTransaction().add(binding.navHostFragment.id, HomeFragment())
+            .commit()
 
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -40,25 +43,30 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(HomeFragment())
                     true
                 }
+
                 R.id.navigation_ai -> {
                     replaceFragment(AiFragment())
                     true
                 }
+
                 R.id.navigation_community -> {
                     replaceFragment(CommunityFragment())
                     true
                 }
+
                 R.id.navigation_profile -> {
                     replaceFragment(ProfileFragment())
                     true
                 }
+
                 else -> false
             }
         }
     }
 
     private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().replace(binding.navHostFragment.id, fragment).commit()
+        supportFragmentManager.beginTransaction().replace(binding.navHostFragment.id, fragment)
+            .commit()
     }
 
 }

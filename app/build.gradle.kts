@@ -54,29 +54,28 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    // timber
+
     implementation (libs.timber)
-    // hilt
+
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
-    // retrofit
+
+    implementation(libs.coil)
+
     implementation(libs.gson)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
-    // 카카오 로그인 API 모듈
+
     implementation(libs.v2.user)
-    // gemini
+
     implementation(libs.generativeai)
-    // 바텀 네비
+
     implementation(libs.material)
 
-    // 유닛 테스트
     testImplementation(libs.junit)
-    // 통합 테스트
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation(libs.coil)
-
 }

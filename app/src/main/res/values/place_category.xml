@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="place_category">
+        <string>공유 오피스</string>
+        <string>식당</string>
+        <string>카페</string>
+        <string>숙소</string>
+    </string-array>
+</resources>

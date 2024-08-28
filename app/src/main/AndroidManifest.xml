@@ -15,14 +15,23 @@
         android:theme="@style/Theme.GangwonHyuil"
         tools:targetApi="31">
         <activity
+            android:name=".ui.community.addPlace.AddPlaceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.community.addPost.AddPostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.community.postDetail.PostDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.onboarding.OnBodingActivity"
-            android:exported="true" >
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

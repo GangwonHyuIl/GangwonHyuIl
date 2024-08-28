@@ -8,6 +8,7 @@
     android:paddingVertical="4dp">
 
     <TextView
+        android:id="@+id/tv_place_list_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="22sp"

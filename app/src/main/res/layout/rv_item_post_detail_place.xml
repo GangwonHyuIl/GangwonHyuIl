@@ -17,6 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/tv_place_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="22sp"
@@ -26,6 +27,7 @@
             tools:text="000 공유 오피스" />
 
         <ImageButton
+            android:id="@+id/btn_toggle_place_detail"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:src="@drawable/ic_keyboard_arrow_down_24"
@@ -54,6 +56,7 @@
             android:scaleType="centerCrop" />
 
         <TextView
+            android:id="@+id/tv_place_detail_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"

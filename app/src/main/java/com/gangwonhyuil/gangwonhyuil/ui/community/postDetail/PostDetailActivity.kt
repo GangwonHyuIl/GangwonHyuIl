@@ -1,4 +1,4 @@
-package com.gangwonhyuil.gangwonhyuil.ui.community
+package com.gangwonhyuil.gangwonhyuil.ui.community.postDetail
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

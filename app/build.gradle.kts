@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -52,22 +54,28 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
-    implementation(libs.v2.user) // 카카오 로그인 API 모듈
-
-    //retrofit
+    // timber
+    implementation (libs.timber)
+    // hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    // retrofit
     implementation(libs.gson)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
-
-    //gemini
+    // 카카오 로그인 API 모듈
+    implementation(libs.v2.user)
+    // gemini
     implementation(libs.generativeai)
-
-    //바텀 네비
+    // 바텀 네비
     implementation(libs.material)
+
+    // 유닛 테스트
+    testImplementation(libs.junit)
+    // 통합 테스트
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+
 }

@@ -55,6 +55,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.coil)
 
     implementation ("com.kakao.sdk:v2-user:2.20.3") // 카카오 로그인 API 모듈
 

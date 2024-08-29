@@ -1,4 +1,4 @@
-package com.gangwonhyuil.gangwonhyuil.ui
+package com.gangwonhyuil.gangwonhyuil.util.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,6 +1,6 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.screen.community
 
-import com.gangwonhyuil.gangwonhyuil.ui.BaseViewModel
+import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetPostItemsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

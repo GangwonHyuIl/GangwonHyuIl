@@ -1,4 +1,4 @@
-package com.gangwonhyuil.gangwonhyuil.ui.community.postDetail
+package com.gangwonhyuil.gangwonhyuil.ui.community.screen.addPost
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -7,11 +7,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.gangwonhyuil.gangwonhyuil.R
 
-class PostDetailActivity : AppCompatActivity() {
+class AddPostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_post_detail)
+        setContentView(R.layout.activity_add_post)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)

@@ -17,12 +17,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/iv_writer_image"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:background="@drawable/shape_circle"
             android:clipToOutline="true" />
 
         <TextView
+            android:id="@+id/tv_writer_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -34,6 +36,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tv_post_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:ellipsize="end"
@@ -53,13 +56,15 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:layout_marginEnd="8dp"
+            android:id="@+id/tv_place_list_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:textSize="14sp"
             tools:text="목록 2개" />
 
         <TextView
+            android:id="@+id/tv_place_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"

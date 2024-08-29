@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/communityFragment"
-        android:name="com.gangwonhyuil.gangwonhyuil.ui.community.CommunityFragment"
+        android:name="com.gangwonhyuil.gangwonhyuil.ui.community.screen.community.CommunityFragment"
         android:label="FacilityFragment"
         tools:layout="@layout/fragment_community" />
 

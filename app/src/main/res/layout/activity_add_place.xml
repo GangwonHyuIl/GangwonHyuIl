@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         app:menu="@menu/add_place_top_app_bar"
-        app:navigationIcon="@drawable/ic_arrow_back_24"
+        app:navigationIcon="@drawable/ic_arrow_backward_24"
         app:title="장소 추가" />
 
     <LinearLayout

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         app:menu="@menu/post_detail_top_app_bar"
-        app:navigationIcon="@drawable/ic_arrow_back_24"
+        app:navigationIcon="@drawable/ic_arrow_backward_24"
         app:title="게시글" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,21 +1,10 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail
 
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.gangwonhyuil.gangwonhyuil.R
+import android.view.LayoutInflater
+import com.gangwonhyuil.gangwonhyuil.databinding.ActivityPostDetailBinding
+import com.gangwonhyuil.gangwonhyuil.util.base.BaseActivity
 
-class PostDetailActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_post_detail)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-    }
+class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
+    override fun inflateBinding(inflater: LayoutInflater): ActivityPostDetailBinding =
+        ActivityPostDetailBinding.inflate(layoutInflater)
 }

@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.FragmentCommunityBinding
+import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailActivity.Companion.getPostDetailActivityIntent
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -22,9 +23,7 @@ interface OnPostItemClickListener {
 class CommunityFragment :
     BaseFragment<FragmentCommunityBinding>(),
     OnPostItemClickListener {
-    private val viewModel by lazy {
-        ViewModelProvider(this@CommunityFragment)[CommunityViewModel::class.java]
-    }
+    private val viewModel by viewModels<CommunityViewModel>()
 
     private lateinit var placeItemAdapter: PlaceItemAdapter
 
@@ -73,7 +72,12 @@ class CommunityFragment :
     }
 
     override fun onPostItemClick(id: Long) {
-        // TODO: start post detail activity, send post id
         Timber.d("post item clicked) id: $id")
+        startActivity(
+            getPostDetailActivityIntent(
+                requireContext(),
+                id
+            )
+        )
     }
 }

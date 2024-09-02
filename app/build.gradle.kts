@@ -70,4 +70,7 @@ dependencies {
 
     //바텀 네비
     implementation("com.google.android.material:material:1.12.0")
+
+    //Glide
+    implementation(libs.glide)
 }

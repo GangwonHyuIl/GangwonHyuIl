@@ -68,11 +68,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_name" />
 
-    <View
-        android:id="@+id/view_review"
+    <include
+        android:id="@+id/layout_item_review"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        layout="@layout/item_post"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_my_review" />
@@ -83,10 +84,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
-        android:text="내가 쓴 후기"
+        android:text="내가 쓴 게시글"
         android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_review" />
+        app:layout_constraintTop_toBottomOf="@id/layout_item_review" />
 
     <TextView
         android:id="@+id/tv_my_post_more"
@@ -97,13 +98,14 @@
         android:text="더보기 >"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_review" />
+        app:layout_constraintTop_toBottomOf="@id/layout_item_review" />
 
-    <View
-        android:id="@+id/view_post"
+    <include
+        android:id="@+id/layout_item_post"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        layout="@layout/item_post"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_my_post" />

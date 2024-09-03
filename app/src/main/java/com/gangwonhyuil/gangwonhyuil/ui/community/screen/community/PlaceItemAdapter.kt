@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.viewbinding.ViewBinding
 import coil.load
 import com.gangwonhyuil.gangwonhyuil.databinding.RvItemCommunityBinding
-import com.gangwonhyuil.gangwonhyuil.ui.community.model.PostItem
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseAdapter
 
 class PlaceItemAdapter(
@@ -23,23 +22,23 @@ class PlaceItemAdapter(
             false
         )
 
-    override fun createViewHolder(binding: ViewBinding): BaseViewHolder<PostItem> = PostItemHolder(binding as RvItemCommunityBinding)
+    override fun createViewHolder(binding: ViewBinding): BaseViewHolder<PostItem> = PostItemViewHolder(binding as RvItemCommunityBinding)
 
-    inner class PostItemHolder(
+    inner class PostItemViewHolder(
         binding: RvItemCommunityBinding,
     ) : BaseViewHolder<PostItem>(binding.root) {
-        private val writerProfileImageView: ImageView = binding.ivWriterProfile
-        private val writerNameTextView: TextView = binding.tvWriterName
-        private val postContentTextView: TextView = binding.tvPostContent
+        private val ivWriterProfile: ImageView = binding.ivWriterProfile
+        private val tvWriterName: TextView = binding.tvWriterName
+        private val tvPostContent: TextView = binding.tvPostContent
         private val tvPlaceListCount: TextView = binding.tvPlaceListCount
         private val tvPlaceCount: TextView = binding.tvPlaceCount
 
         override fun bind(postItem: PostItem) {
             with(postItem) {
-                writerProfileImageView.load(writerInfo.profileImage)
-                writerNameTextView.text = writerInfo.name
+                ivWriterProfile.load(writerInfo.profileImage)
+                tvWriterName.text = writerInfo.name
 
-                postContentTextView.text = content
+                tvPostContent.text = content
                 tvPlaceListCount.text = "목록 ${placeListCount}개"
                 tvPlaceCount.text = "총 장소 ${placeCount}개"
             }

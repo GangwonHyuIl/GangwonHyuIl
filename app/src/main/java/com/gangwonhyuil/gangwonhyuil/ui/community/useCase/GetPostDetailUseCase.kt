@@ -4,7 +4,6 @@ import com.gangwonhyuil.gangwonhyuil.ui.community.model.PlaceCategory
 import com.gangwonhyuil.gangwonhyuil.ui.community.model.PostDetail
 import com.gangwonhyuil.gangwonhyuil.ui.community.model.WriterInfo
 import java.net.URL
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 class GetPostDetailUseCase
@@ -20,7 +19,7 @@ class GetPostDetailUseCase
                         name = "작성자1",
                         profileImage = URL("http://")
                     ),
-                timeStamp = LocalDateTime.now(),
+                timeStamp = "0000/00/00 00:00:00",
                 content = "춘천에 7박 8일로 다녀온 워케이션 정보 공유합니다~",
                 placeList =
                     listOf(

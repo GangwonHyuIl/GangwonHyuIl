@@ -1,12 +1,11 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.model
 
 import java.net.URL
-import java.time.LocalDateTime
 
 data class PostDetail(
     val id: Long,
     val writerInfo: WriterInfo,
-    val timeStamp: LocalDateTime,
+    val timeStamp: String,
     val content: String,
     val placeList: List<PlaceList>,
 ) {

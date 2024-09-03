@@ -26,12 +26,15 @@ class CommentItemAdapter : BaseAdapter<CommentItem>() {
     ) : BaseViewHolder<CommentItem>(binding.root) {
         private val ivWriterImage = binding.ivCommentWriterImage
         private val tvWriterName = binding.tvCommentWriterName
+        private val tvCommentTime = binding.tvCommentTime
         private val tvCommentContent = binding.tvCommentContent
 
         override fun bind(item: CommentItem) {
             with(item) {
                 ivWriterImage.load(writerProfileImage)
                 tvWriterName.text = writerName
+                tvCommentTime.text = timeStamp
+
                 tvCommentContent.text = content
             }
         }

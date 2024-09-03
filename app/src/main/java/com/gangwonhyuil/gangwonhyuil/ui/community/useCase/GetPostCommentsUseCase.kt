@@ -3,7 +3,6 @@ package com.gangwonhyuil.gangwonhyuil.ui.community.useCase
 import com.gangwonhyuil.gangwonhyuil.ui.community.model.PostComment
 import com.gangwonhyuil.gangwonhyuil.ui.community.model.WriterInfo
 import java.net.URL
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 class GetPostCommentsUseCase
@@ -22,7 +21,7 @@ class GetPostCommentsUseCase
                                 name = "작성자$i",
                                 profileImage = URL("http://")
                             ),
-                        timeStamp = LocalDateTime.now(),
+                        timeStamp = "0000/00/00 00:00:00",
                         content = "댓글$i 내용 댓글$i 내용 댓글$i 내용댓글$i 내용 댓글$i 내용"
                     )
                 )

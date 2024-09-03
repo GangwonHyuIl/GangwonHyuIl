@@ -112,7 +112,7 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
                         // set writer info
                         binding.ivPostWriterImage.load(it.writerInfo.profileImage)
                         binding.tvPostWriterName.text = it.writerInfo.name
-                        binding.tvPostTime.text = it.timeStamp.toString()
+                        binding.tvPostTime.text = it.timeStamp
                         // set content
                         binding.tvPostContent.text = it.content
                         // set place list

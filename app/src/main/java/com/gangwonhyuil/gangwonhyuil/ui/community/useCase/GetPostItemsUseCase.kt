@@ -3,7 +3,6 @@ package com.gangwonhyuil.gangwonhyuil.ui.community.useCase
 import com.gangwonhyuil.gangwonhyuil.ui.community.model.WriterInfo
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.community.PostItem
 import java.net.URL
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 class GetPostItemsUseCase
@@ -22,7 +21,7 @@ class GetPostItemsUseCase
                                 name = "작성자$i",
                                 profileImage = URL("http://")
                             ),
-                        timeStamp = LocalDateTime.now(),
+                        timeStamp = "0000/00/00 00:00:00",
                         content = "게시글 $i 내용 게시글 $i 내용 게시글 $i 내용 게시글 $i 내용",
                         placeListCount = i * 2,
                         placeCount = i * 3

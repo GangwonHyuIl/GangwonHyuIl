@@ -29,6 +29,8 @@ class PlaceItemAdapter(
     ) : BaseViewHolder<PostItem>(binding.root) {
         private val ivWriterProfile: ImageView = binding.ivWriterProfile
         private val tvWriterName: TextView = binding.tvWriterName
+        private val tvPostTime: TextView = binding.tvPostTime
+
         private val tvPostContent: TextView = binding.tvPostContent
         private val tvPlaceListCount: TextView = binding.tvPlaceListCount
         private val tvPlaceCount: TextView = binding.tvPlaceCount
@@ -37,6 +39,7 @@ class PlaceItemAdapter(
             with(postItem) {
                 ivWriterProfile.load(writerInfo.profileImage)
                 tvWriterName.text = writerInfo.name
+                tvPostTime.text = timeStamp
 
                 tvPostContent.text = content
                 tvPlaceListCount.text = "목록 ${placeListCount}개"

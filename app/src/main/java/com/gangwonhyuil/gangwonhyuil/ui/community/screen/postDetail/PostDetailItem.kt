@@ -1,8 +1,8 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail
 
-import com.gangwonhyuil.gangwonhyuil.ui.community.model.PlaceCategory
-import com.gangwonhyuil.gangwonhyuil.ui.community.model.PostComment
-import com.gangwonhyuil.gangwonhyuil.ui.community.model.PostDetail
+import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PlaceCategory
+import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostComment
+import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostDetail
 import com.gangwonhyuil.gangwonhyuil.util.base.Eigenvalue
 import java.net.URL
 

@@ -1,6 +1,6 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.useCase
 
-import com.gangwonhyuil.gangwonhyuil.ui.community.model.WriterInfo
+import com.gangwonhyuil.gangwonhyuil.ui.community.entity.WriterInfo
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.community.PostItem
 import java.net.URL
 import javax.inject.Inject

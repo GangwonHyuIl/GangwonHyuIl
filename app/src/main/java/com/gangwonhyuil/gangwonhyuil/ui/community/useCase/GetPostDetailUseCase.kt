@@ -1,8 +1,8 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.useCase
 
-import com.gangwonhyuil.gangwonhyuil.ui.community.model.PlaceCategory
-import com.gangwonhyuil.gangwonhyuil.ui.community.model.PostDetail
-import com.gangwonhyuil.gangwonhyuil.ui.community.model.WriterInfo
+import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PlaceCategory
+import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostDetail
+import com.gangwonhyuil.gangwonhyuil.ui.community.entity.WriterInfo
 import java.net.URL
 import javax.inject.Inject
 

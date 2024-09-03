@@ -1,8 +1,8 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail
 
 import androidx.lifecycle.SavedStateHandle
-import com.gangwonhyuil.gangwonhyuil.ui.community.model.PostComment
-import com.gangwonhyuil.gangwonhyuil.ui.community.model.PostDetail
+import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostComment
+import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostDetail
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailItem.Companion.toCommentItems
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailItem.Companion.toPlaceItems
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetPostCommentsUseCase

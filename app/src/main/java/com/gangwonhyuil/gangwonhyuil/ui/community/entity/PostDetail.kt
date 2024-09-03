@@ -1,4 +1,4 @@
-package com.gangwonhyuil.gangwonhyuil.ui.community.model
+package com.gangwonhyuil.gangwonhyuil.ui.community.entity
 
 import java.net.URL
 

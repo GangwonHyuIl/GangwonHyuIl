@@ -1,6 +1,5 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.screen.community
 
-import com.gangwonhyuil.gangwonhyuil.ui.community.model.PostItem
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetPostItemsUseCase
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,5 +1,6 @@
-package com.gangwonhyuil.gangwonhyuil.ui.community.model
+package com.gangwonhyuil.gangwonhyuil.ui.community.screen.community
 
+import com.gangwonhyuil.gangwonhyuil.ui.community.model.WriterInfo
 import com.gangwonhyuil.gangwonhyuil.util.base.Eigenvalue
 import java.time.LocalDateTime
 

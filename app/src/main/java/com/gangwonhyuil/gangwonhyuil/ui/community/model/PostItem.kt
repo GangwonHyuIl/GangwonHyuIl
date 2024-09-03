@@ -1,12 +1,12 @@
-package com.gangwonhyuil.gangwonhyuil.ui.community.screen.community
+package com.gangwonhyuil.gangwonhyuil.ui.community.model
 
 import com.gangwonhyuil.gangwonhyuil.util.base.Eigenvalue
-import java.net.URL
+import java.time.LocalDateTime
 
 data class PostItem(
     val id: Long,
-    val writerImage: URL,
-    val writerName: String,
+    val writerInfo: WriterInfo,
+    val timeStamp: LocalDateTime,
     val content: String,
     val placeListCount: Int,
     val placeCount: Int,

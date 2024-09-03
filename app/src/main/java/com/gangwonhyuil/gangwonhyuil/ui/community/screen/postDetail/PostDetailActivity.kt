@@ -6,11 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import coil.load
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivityPostDetailBinding
-import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.CommentItem.Companion.toCommentItem
-import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PlaceItem.Companion.toPlaceItems
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -20,30 +17,20 @@ import timber.log.Timber
 class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
     private val viewModel by viewModels<PostDetailViewModel>()
 
-    private lateinit var placeItemAdapter: PlaceItemAdapter
-    private lateinit var commentItemAdapter: CommentItemAdapter
+    private lateinit var postDetailItemAdapter: PostDetailItemAdapter
 
     override fun inflateBinding(inflater: LayoutInflater): ActivityPostDetailBinding = ActivityPostDetailBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        getExtras()
 
         initView()
         initObserveViewModel()
     }
 
-    private fun getExtras() {
-        intent.extras?.let {
-            val postId = it.getLong(EXTRA_POST_ID)
-            Timber.d("postId: $postId")
-        }
-    }
-
     private fun initView() {
         initTopAppBar()
-        initPlaceListRecyclerView()
-        initPostCommentRecyclerView()
+        initPostDetailRecyclerView()
     }
 
     private fun initTopAppBar() {
@@ -78,14 +65,9 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
         }
     }
 
-    private fun initPlaceListRecyclerView() {
-        placeItemAdapter = PlaceItemAdapter()
-        binding.rvPlaceList.adapter = placeItemAdapter
-    }
-
-    private fun initPostCommentRecyclerView() {
-        commentItemAdapter = CommentItemAdapter()
-        binding.rvComment.adapter = commentItemAdapter
+    private fun initPostDetailRecyclerView() {
+        postDetailItemAdapter = PostDetailItemAdapter()
+        binding.rvPostDetail.adapter = postDetailItemAdapter
     }
 
     private fun initObserveViewModel() {
@@ -106,24 +88,8 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
                 }
             }
             lifecycleScope.launch {
-                postDetail.collect { postDetail ->
-                    postDetail?.let {
-                        Timber.d("postDetail: $it")
-                        // set writer info
-                        binding.ivPostWriterImage.load(it.writerInfo.profileImage)
-                        binding.tvPostWriterName.text = it.writerInfo.name
-                        binding.tvPostTime.text = it.timeStamp
-                        // set content
-                        binding.tvPostContent.text = it.content
-                        // set place list
-                        placeItemAdapter.submitList(toPlaceItems(it.placeList))
-                    }
-                }
-            }
-            lifecycleScope.launch {
-                postComments.collect { postComments ->
-                    Timber.d("postComments: $postComments")
-                    commentItemAdapter.submitList(postComments.map { toCommentItem(it) })
+                postDetailItems.collect { postDetailItems ->
+                    postDetailItemAdapter.submitList(postDetailItems)
                 }
             }
         }

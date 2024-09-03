@@ -38,9 +38,13 @@ class CommunityFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView()
+        initViewModelObserver()
+    }
+
+    private fun initView() {
         initTopAppBar()
         initPlaceItemRecyclerView()
-        initViewModelObserver()
     }
 
     private fun initTopAppBar() {

@@ -46,11 +46,17 @@
         app:layout_constraintTop_toBottomOf="@id/ly_place_name"
         tools:visibility="visible">
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vp_place_image"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" />
+            android:layout_height="wrap_content">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_place_image"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintDimensionRatio="H,1:1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/tv_place_address"

@@ -11,6 +11,7 @@ import com.gangwonhyuil.gangwonhyuil.databinding.RvItemPostDetailCommentHeaderBi
 import com.gangwonhyuil.gangwonhyuil.databinding.RvItemPostDetailHeaderBinding
 import com.gangwonhyuil.gangwonhyuil.databinding.RvItemPostDetailPlaceBinding
 import com.gangwonhyuil.gangwonhyuil.databinding.RvItemPostDetailPostBinding
+import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.ImageItem.Companion.toImageItems
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseAdapter
 
 class PostDetailItemAdapter : BaseAdapter<PostDetailItem>() {
@@ -113,6 +114,8 @@ class PostDetailItemAdapter : BaseAdapter<PostDetailItem>() {
     inner class PlaceItemViewHolder(
         binding: RvItemPostDetailPlaceBinding,
     ) : BaseViewHolder<PostDetailItem.PlaceItem>(binding.root) {
+        private val imageItemAdapter = ImageItemAdapter()
+
         private val tvPlaceName = binding.tvPlaceName
 
         private val toggleButton = binding.btnTogglePlaceDetail
@@ -125,7 +128,8 @@ class PostDetailItemAdapter : BaseAdapter<PostDetailItem>() {
         override fun bind(placeItem: PostDetailItem.PlaceItem) {
             with(placeItem) {
                 tvPlaceName.text = name
-                // TODO: set place image view pager
+                vpPlaceImage.adapter = imageItemAdapter
+                imageItemAdapter.submitList(toImageItems(images))
                 tvPlaceAddress.text = address
                 tvPlaceDetailContent.text = content
             }

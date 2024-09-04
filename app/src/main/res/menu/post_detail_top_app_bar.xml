@@ -7,16 +7,4 @@
         android:contentDescription="게시글 신고하기"
         app:showAsAction="never"
         />
-    <item
-        android:id="@+id/edit_post"
-        android:title="수정하기"
-        android:contentDescription="게시글 수정하기"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/delete_post"
-        android:title="삭제하기"
-        android:contentDescription="게시글 삭제하기"
-        app:showAsAction="never"
-        />
 </menu>

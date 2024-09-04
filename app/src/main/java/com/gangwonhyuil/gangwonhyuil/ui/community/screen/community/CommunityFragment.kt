@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.FragmentCommunityBinding
+import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailActivity.Companion.getPostDetailActivityIntent
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -19,26 +20,31 @@ interface OnPostItemClickListener {
 }
 
 @AndroidEntryPoint
-class CommunityFragment : BaseFragment<FragmentCommunityBinding>(), OnPostItemClickListener {
-    private val viewModel by lazy {
-        ViewModelProvider(this@CommunityFragment)[CommunityViewModel::class.java]
-    }
+class CommunityFragment :
+    BaseFragment<FragmentCommunityBinding>(),
+    OnPostItemClickListener {
+    private val viewModel by viewModels<CommunityViewModel>()
 
     private lateinit var placeItemAdapter: PlaceItemAdapter
 
     override fun inflateBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentCommunityBinding {
-        return FragmentCommunityBinding.inflate(inflater, container, false)
-    }
+        container: ViewGroup?,
+    ): FragmentCommunityBinding = FragmentCommunityBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView()
+        initViewModelObserver()
+    }
+
+    private fun initView() {
         initTopAppBar()
         initPlaceItemRecyclerView()
-        initViewModelObserver()
     }
 
     private fun initTopAppBar() {
@@ -64,13 +70,18 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(), OnPostItemCl
     private fun initViewModelObserver() {
         lifecycleScope.launch {
             viewModel.postItems.collectLatest { postItems ->
-                placeItemAdapter.updateItems(postItems)
+                placeItemAdapter.submitList(postItems)
             }
         }
     }
 
     override fun onPostItemClick(id: Long) {
-        // TODO: start post detail activity, send post id
-        Timber.d("post item clicked) id: ${id}")
+        Timber.d("post item clicked) id: $id")
+        startActivity(
+            getPostDetailActivityIntent(
+                requireContext(),
+                id
+            )
+        )
     }
 }

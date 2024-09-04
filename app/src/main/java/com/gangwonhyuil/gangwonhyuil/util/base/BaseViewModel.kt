@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 
-abstract class BaseViewModel() : ViewModel() {
+abstract class BaseViewModel : ViewModel() {
+    @Suppress("ktlint:standard:backing-property-naming")
     private val _exceptions: MutableSharedFlow<Exception> = MutableSharedFlow()
     protected val exceptions = _exceptions.asSharedFlow()
 

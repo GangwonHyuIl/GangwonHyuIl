@@ -7,21 +7,22 @@ import coil.load
 import com.gangwonhyuil.gangwonhyuil.databinding.RvItemOfficeBinding
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseAdapter
 
-class OfficeAdapter() : BaseAdapter<Office>() {
-    override fun createBinding(parent: ViewGroup, viewType: Int): ViewBinding {
-        return RvItemOfficeBinding.inflate(
+class OfficeAdapter : BaseAdapter<Office>() {
+    override fun createBinding(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ViewBinding =
+        RvItemOfficeBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-    }
 
-    override fun createViewHolder(binding: ViewBinding): BaseViewHolder<Office> {
-        return OfficeItemHolder(binding as RvItemOfficeBinding)
-    }
+    override fun createViewHolder(binding: ViewBinding): BaseViewHolder<Office> = OfficeItemHolder(binding as RvItemOfficeBinding)
 
-    inner class OfficeItemHolder(binding: RvItemOfficeBinding) :
-        BaseViewHolder<Office>(binding.root) {
+    inner class OfficeItemHolder(
+        binding: RvItemOfficeBinding,
+    ) : BaseViewHolder<Office>(binding.root) {
         private val officeImageView = binding.ivItemImage
         private val officeNameTextView = binding.tvItemName
         private val officeRatingTextView = binding.tvItemRating

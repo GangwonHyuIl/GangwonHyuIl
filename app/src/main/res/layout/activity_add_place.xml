@@ -9,6 +9,7 @@
     tools:context=".ui.community.screen.addPlace.AddPlaceActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/top_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
@@ -16,132 +17,145 @@
         app:navigationIcon="@drawable/ic_arrow_backward_24"
         app:title="장소 추가" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingBottom="4dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="8dp"
-            android:text="분류"
-            android:textSize="22sp" />
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_border_radius_8">
-
-            <Spinner
-                android:id="@+id/spinner_place_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/spinner_item_place_category" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingBottom="4dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="8dp"
-            android:text="장소"
-            android:textSize="22sp" />
-
-        <EditText
-            android:id="@+id/et_place_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:enabled="false"
-            android:hint="장소를 검색해 주세요"
-            android:maxLines="1"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/tv_search_place"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:text="장소 검색" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingBottom="4dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="8dp"
-            android:text="주소"
-            android:textSize="22sp" />
-
-        <EditText
-            android:id="@+id/et_place_address"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:hint="장소를 추가해 주세요"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="16dp"
-        android:paddingBottom="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="8dp"
-            android:text="사진"
-            android:textSize="22sp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_place_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="1"
-            tools:listitem="@layout/rv_item_add_place_image" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/gray"
-        android:minHeight="150dp"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="4dp">
-
-        <EditText
-            android:id="@+id/et_post_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:hint="장소에 대한 설명을 입력해 주세요"
-            android:textSize="18sp" />
-    </LinearLayout>
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="8dp"
+                    android:text="분류"
+                    android:textSize="22sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_border_radius_8">
+
+                    <Spinner
+                        android:id="@+id/spinner_place_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/spinner_item_place_category" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="8dp"
+                    android:text="장소"
+                    android:textSize="22sp" />
+
+                <EditText
+                    android:id="@+id/et_place_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:enabled="false"
+                    android:hint="장소를 검색해 주세요"
+                    android:maxLines="1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_search_place"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:text="장소 검색" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="8dp"
+                    android:text="주소"
+                    android:textSize="22sp" />
+
+                <EditText
+                    android:id="@+id/et_place_address"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:enabled="false"
+                    android:hint="장소를 추가해 주세요"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="8dp"
+                    android:text="사진"
+                    android:textSize="22sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_place_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/rv_item_add_place_image" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray"
+                android:minHeight="150dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="4dp">
+
+                <EditText
+                    android:id="@+id/et_post_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="장소에 대한 설명을 입력해 주세요"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 </LinearLayout>

@@ -4,9 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivityAddPlaceBinding
+import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PlaceCategory
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.addPost.EXTRA_PLACE_RESULT
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseActivity
 import com.google.gson.Gson
@@ -29,6 +33,7 @@ class AddPlaceActivity : BaseActivity<ActivityAddPlaceBinding>() {
 
     private fun initView() {
         initTopAppBar()
+        initSpinner()
     }
 
     private fun initTopAppBar() {
@@ -55,6 +60,32 @@ class AddPlaceActivity : BaseActivity<ActivityAddPlaceBinding>() {
                     else -> false
                 }
             }
+        }
+    }
+
+    private fun initSpinner() {
+        with(binding.spinnerPlaceCategory) {
+            adapter =
+                ArrayAdapter(
+                    this@AddPlaceActivity,
+                    R.layout.spinner_item_place_category,
+                    PlaceCategory.entries.map { it.category }
+                )
+            onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        p0: AdapterView<*>?,
+                        p1: View?,
+                        p2: Int,
+                        p3: Long,
+                    ) {
+                        viewModel.onSelectPlaceCategory(PlaceCategory.entries[p2])
+                    }
+
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+                        // do nothing
+                    }
+                }
         }
     }
 

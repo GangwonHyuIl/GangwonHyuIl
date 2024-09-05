@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -79,8 +80,17 @@ class AddPostActivity :
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.register_post -> {
-                        viewModel.registerPost()
-                        finish()
+                        if (viewModel.registerState is RegisterState.AbleToRegister) {
+                            viewModel.registerPost()
+                            finish()
+                        } else {
+                            Toast
+                                .makeText(
+                                    this@AddPostActivity,
+                                    viewModel.registerState.message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                        }
                         true
                     }
 

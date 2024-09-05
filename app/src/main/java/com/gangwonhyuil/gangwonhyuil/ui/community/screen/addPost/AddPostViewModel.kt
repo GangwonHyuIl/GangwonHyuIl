@@ -23,6 +23,9 @@ class AddPostViewModel
         private val _addPostItems = MutableStateFlow<List<AddPostItem>>(emptyList())
         val addPostItems = _addPostItems.asStateFlow()
 
+        private var _registerState: RegisterState = RegisterState.EmptyContent
+        val registerState: RegisterState get() = _registerState
+
         init {
             viewModelScopeEH.launch {
                 exceptions.collect {
@@ -31,6 +34,7 @@ class AddPostViewModel
             }
 
             combine(_content, _placeLists, _places) { content, placeLists, places ->
+                // set post items for recycler view
                 val items =
                     mutableListOf<AddPostItem>().apply {
                         add(content)
@@ -41,8 +45,24 @@ class AddPostViewModel
                         }
                         add(AddPostItem.AddPlaceList)
                     }
-
                 _addPostItems.update { items }
+
+                // set register state
+                _registerState =
+                    if (content.content.isEmpty()) {
+                        RegisterState.EmptyContent
+                    } else if (placeLists.any { it.name.isEmpty() }) {
+                        RegisterState.EmptyPlaceListName
+                    } else {
+                        var isAnyPlaceListEmpty = false
+                        for (placeList in placeLists) {
+                            if (places.none { it.placeListId == placeList.id }) {
+                                isAnyPlaceListEmpty = true
+                                break
+                            }
+                        }
+                        if (isAnyPlaceListEmpty) RegisterState.EmptyPlaceList else RegisterState.AbleToRegister
+                    }
             }.launchIn(viewModelScopeEH)
         }
 
@@ -93,3 +113,23 @@ class AddPostViewModel
             Timber.d("registerPost")
         }
     }
+
+sealed interface RegisterState {
+    val message: String
+
+    data object AbleToRegister : RegisterState {
+        override val message = ""
+    }
+
+    data object EmptyContent : RegisterState {
+        override val message = "게시글 내용을 입력해주세요"
+    }
+
+    data object EmptyPlaceListName : RegisterState {
+        override val message = "장소 목록 이름을 입력해주세요"
+    }
+
+    data object EmptyPlaceList : RegisterState {
+        override val message = "장소 목록에 장소를 추가해주세요"
+    }
+}

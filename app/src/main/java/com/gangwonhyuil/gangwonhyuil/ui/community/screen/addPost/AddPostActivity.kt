@@ -4,14 +4,21 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivityAddPostBinding
+import com.gangwonhyuil.gangwonhyuil.ui.community.screen.addPlace.AddPlaceActivity
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseActivity
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
+
+const val EXTRA_PLACE_RESULT = "extra_place_result"
 
 interface OnAddPlaceItemClickListener {
     fun onContentInput(content: String)
@@ -37,6 +44,18 @@ class AddPostActivity :
     private val viewModel by viewModels<AddPostViewModel>()
 
     private lateinit var placeListItemAdapter: AddPostItemAdapter
+
+    private val addPlaceActivityLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult: ActivityResult ->
+            if (activityResult.resultCode == RESULT_OK) {
+                activityResult.data?.getStringExtra(EXTRA_PLACE_RESULT)?.let {
+                    Timber.d("place result: $it")
+                    Gson().fromJson(it, AddPostItem.Place::class.java)?.let { newPlace ->
+                        viewModel.onAddPlace(newPlace)
+                    }
+                }
+            }
+        }
 
     override fun inflateBinding(inflater: LayoutInflater): ActivityAddPostBinding = ActivityAddPostBinding.inflate(layoutInflater)
 
@@ -104,9 +123,12 @@ class AddPostActivity :
     }
 
     override fun onAddPlaceClick(placeListId: String) {
-        // TODO: start add place activity
-        // TODO: save added place on activity finish
-        Timber.d("onAddPlaceClick, placeListId: $placeListId")
+        addPlaceActivityLauncher.launch(
+            AddPlaceActivity.getAddPlaceActivityIntent(
+                context = this,
+                placeListId = placeListId
+            )
+        )
     }
 
     override fun onDeletePlaceClick(placeId: String) {
@@ -118,9 +140,6 @@ class AddPostActivity :
     }
 
     companion object {
-        fun getAddPostActivityIntent(context: Context): Intent {
-            Timber.d("startAddPostActivity")
-            return Intent(context, AddPostActivity::class.java)
-        }
+        fun getAddPostActivityIntent(context: Context): Intent = Intent(context, AddPostActivity::class.java)
     }
 }

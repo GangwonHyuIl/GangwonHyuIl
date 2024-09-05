@@ -2,7 +2,6 @@ package com.gangwonhyuil.gangwonhyuil.ui.community.screen.addPost
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.viewbinding.ViewBinding
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.RvItemAddPostAddPlaceBinding
@@ -77,8 +76,10 @@ class AddPostItemAdapter(
 
         override fun bind(item: AddPostItem.Content) {
             etContent.setText(item.content)
-            etContent.addTextChangedListener {
-                onClickListener.onContentInput(it.toString())
+            etContent.setOnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus) {
+                    onClickListener.onContentInput(etContent.text.toString())
+                }
             }
         }
     }
@@ -92,8 +93,13 @@ class AddPostItemAdapter(
         override fun bind(item: AddPostItem.PlaceList) {
             with(item) {
                 etPlaceListName.setText(name)
-                etPlaceListName.addTextChangedListener {
-                    onClickListener.onPlaceListNameInput(id, it.toString())
+                etPlaceListName.setOnFocusChangeListener { _, hasFocus ->
+                    if (!hasFocus) {
+                        onClickListener.onPlaceListNameInput(
+                            id = id,
+                            name = etPlaceListName.text.toString()
+                        )
+                    }
                 }
                 setOnClickListener(id)
             }

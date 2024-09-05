@@ -11,8 +11,19 @@ android {
     namespace = "com.gangwonhyuil.gangwonhyuil"
     compileSdk = 34
 
-    val properties = Properties()
-    properties.load(project.rootProject.file("local.properties").inputStream())
+    val isCiEnvironment = System.getenv("CI") == "true"
+    val weatherApiKey: String = if (isCiEnvironment) {
+        System.getenv("WEATHER_API_KEY") ?: throw GradleException("WEATHER_API_KEY is not set in CI environment")
+    } else {
+        val properties = Properties()
+        val localPropertiesFile = project.rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            properties.load(localPropertiesFile.inputStream())
+            properties.getProperty("WEATHER_API_KEY")
+        } else {
+            throw GradleException("local.properties file not found and WEATHER_API_KEY is not set")
+        }
+    }
 
     defaultConfig {
         applicationId = "com.gangwonhyuil.gangwonhyuil"
@@ -23,7 +34,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "WEATHER_API_KEY", properties.getProperty("WEATHER_API_KEY"))
+        buildConfigField("String", "WEATHER_API_KEY", "$weatherApiKey")
     }
 
     buildTypes {

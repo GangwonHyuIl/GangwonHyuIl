@@ -99,11 +99,9 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
         fun getPostDetailActivityIntent(
             context: Context,
             postId: Long,
-        ): Intent {
-            Timber.d("startPaymentActivity")
-            return Intent(context, PostDetailActivity::class.java).apply {
+        ): Intent =
+            Intent(context, PostDetailActivity::class.java).apply {
                 putExtra(EXTRA_POST_ID, postId)
             }
-        }
     }
 }

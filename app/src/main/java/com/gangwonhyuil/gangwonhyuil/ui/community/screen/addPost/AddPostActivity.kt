@@ -61,6 +61,7 @@ class AddPostActivity :
                 when (menuItem.itemId) {
                     R.id.register_post -> {
                         viewModel.registerPost()
+                        finish()
                         true
                     }
 

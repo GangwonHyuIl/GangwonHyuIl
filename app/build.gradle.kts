@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
-    implementation (libs.timber)
+    implementation(libs.timber)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

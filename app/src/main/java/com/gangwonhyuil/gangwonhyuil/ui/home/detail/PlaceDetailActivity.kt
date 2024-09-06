@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivityDetailBinding
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseActivity
 
-class DetailActivity : BaseActivity<ActivityDetailBinding>() {
+class PlaceDetailActivity : BaseActivity<ActivityDetailBinding>() {
     private lateinit var detailItemAdapter: DetailItemAdapter
 
     override fun inflateBinding(inflater: LayoutInflater): ActivityDetailBinding =
@@ -21,7 +21,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
     private fun initRecyclerView() {
         detailItemAdapter = DetailItemAdapter()
 
-        binding.rvOfficeDetailImage.apply {
+        binding.rvPlaceDetail.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = detailItemAdapter
         }

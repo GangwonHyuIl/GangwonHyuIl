@@ -18,7 +18,8 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         enableEdgeToEdge()
 
         _binding = inflateBinding(layoutInflater)
-        setContentView(binding.root)    }
+        setContentView(binding.root)
+    }
 
     override fun onDestroy() {
         super.onDestroy()

@@ -1,5 +1,6 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.screen.addPost
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -129,7 +130,23 @@ class AddPostActivity :
     }
 
     override fun onDeletePlaceListClick(placeListId: String) {
-        viewModel.onDeletePlaceList(placeListId)
+        showDeletePlaceListAlert(placeListId)
+    }
+
+    private fun showDeletePlaceListAlert(placeListId: String) {
+        val builder = AlertDialog.Builder(this)
+        builder
+            .setTitle("장소 목록을 삭제하시겠습니까?")
+            .setMessage("장소 목록에 추가된 장소들도 모두 삭제됩니다.")
+            .setPositiveButton(
+                "삭제"
+            ) { _, _ ->
+                viewModel.onDeletePlaceList(placeListId)
+            }.setNegativeButton(
+                "취소"
+            ) { _, _ -> } // do nothing
+
+        builder.show()
     }
 
     override fun onAddPlaceClick(placeListId: String) {

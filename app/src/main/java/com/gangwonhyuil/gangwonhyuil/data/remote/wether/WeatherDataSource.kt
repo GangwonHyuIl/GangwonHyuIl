@@ -5,7 +5,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface WeatherService {
+interface WeatherDataSource {
     @GET("getVilageFcst")
     suspend fun getWeather(
         @Query("serviceKey") serviceKey: String,

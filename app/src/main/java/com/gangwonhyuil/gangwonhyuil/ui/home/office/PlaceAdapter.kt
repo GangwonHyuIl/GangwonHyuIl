@@ -29,13 +29,11 @@ class PlaceAdapter : BaseAdapter<PlaceItem>() {
         private val officeRatingTextView = binding.tvItemRating
 
         override fun bind(item: PlaceItem) {
-            if (item is PlaceItem.Place) {
-                officeImageView.load(item.image) {
-                    crossfade(true)
-                }
-                officeNameTextView.text = item.name
-//                officeRatingTextView.text = item.rating
+            officeImageView.load(item.image) {
+                crossfade(true)
             }
+            officeNameTextView.text = item.name
+//                officeRatingTextView.text = item.rating
         }
     }
 }

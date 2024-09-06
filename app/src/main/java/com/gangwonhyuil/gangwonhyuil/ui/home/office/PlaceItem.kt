@@ -2,17 +2,14 @@ package com.gangwonhyuil.gangwonhyuil.ui.home.office
 
 import com.gangwonhyuil.gangwonhyuil.util.base.Eigenvalue
 
-sealed interface PlaceItem : Eigenvalue {
-    data class Place(
+data class PlaceItem(
         val id: Long,
         val name: String,
         val address: String,
         val image: String,
 //        val rating: String,
-    ) : PlaceItem {
+    ) : Eigenvalue {
         override val viewType: Int get() = 0
         override val eigenvalue
             get() = id
     }
-
-}

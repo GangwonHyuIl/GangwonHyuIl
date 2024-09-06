@@ -45,7 +45,7 @@ class OfficeViewModel @Inject constructor() : BaseViewModel() {
                         val items = responseBody.response.body.items.item ?: emptyList()
 
                         val officeItems = items.map { apiItem ->
-                            PlaceItem.Place(
+                            PlaceItem(
                                 id = apiItem.contentid.toLong(),
                                 name = apiItem.title,
                                 address = apiItem.addr1,

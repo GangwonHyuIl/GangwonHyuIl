@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.FragmentCommunityBinding
+import com.gangwonhyuil.gangwonhyuil.ui.community.screen.addPost.AddPostActivity
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailActivity.Companion.getPostDetailActivityIntent
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,8 +53,11 @@ class CommunityFragment :
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.add_post -> {
-                        // TODO: start add post activity
-                        Timber.d("add post menu clicked")
+                        startActivity(
+                            AddPostActivity.getAddPostActivityIntent(
+                                requireContext()
+                            )
+                        )
                         true
                     }
                     else -> false

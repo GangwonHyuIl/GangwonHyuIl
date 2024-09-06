@@ -32,8 +32,8 @@ class HomeViewModel @Inject constructor() : BaseViewModel() {
     fun updateSelectedLocationXY(location: String) {
         when (location) {
             "강릉" -> _selectedLocationXY.value = listOf(92, 131)
-            "속초" -> _selectedLocationXY.value = listOf(87, 141)
             "동해" -> _selectedLocationXY.value = listOf(97, 127)
+            "속초" -> _selectedLocationXY.value = listOf(87, 141)
             "춘천" -> _selectedLocationXY.value = listOf(73, 134)
         }
     }

@@ -4,36 +4,67 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 import coil.load
-import com.gangwonhyuil.gangwonhyuil.databinding.RvItemOfficeBinding
-import com.gangwonhyuil.gangwonhyuil.ui.home.office.Office
+import com.gangwonhyuil.gangwonhyuil.databinding.RvItemPlaceDetailImageBinding
+import com.gangwonhyuil.gangwonhyuil.databinding.RvItemPlaceDetailInfoBinding
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseAdapter
 
-class DetailItemAdapter() : BaseAdapter<Office>() {
+class DetailItemAdapter() : BaseAdapter<PlaceDetailItem>() {
     override fun createBinding(parent: ViewGroup, viewType: Int): ViewBinding {
-        return RvItemOfficeBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
+        return when (viewType) {
+            PlaceDetailViewType.PLACE_CONTENT.type -> {
+                RvItemPlaceDetailImageBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            }
+
+            PlaceDetailViewType.PLACE_IMAGE.type -> {
+                RvItemPlaceDetailInfoBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            }
+
+            else -> {
+                throw IllegalArgumentException("Invalid view type")
+            }
+        }
     }
 
-    override fun createViewHolder(binding: ViewBinding): BaseViewHolder<Office> {
-        return OfficeItemHolder(binding as RvItemOfficeBinding)
+    override fun createViewHolder(binding: ViewBinding): BaseViewHolder<PlaceDetailItem> {
+        return when (binding) {
+            is RvItemPlaceDetailInfoBinding -> DetailInfoHolder(binding)
+            is RvItemPlaceDetailImageBinding -> DetailImageHolder(binding)
+            else -> throw IllegalArgumentException("Invalid binding")
+        }
     }
 
-    inner class OfficeItemHolder(binding: RvItemOfficeBinding) :
-        BaseViewHolder<Office>(binding.root) {
+
+    inner class DetailInfoHolder(binding: RvItemPlaceDetailInfoBinding) :
+        BaseViewHolder<PlaceDetailItem>(binding.root) {
+        private val officeRating = binding.tvItemRating
+        private val officeAddress = binding.tvAddress
+        private val officeBusinessHour = binding.tvBusinessHour
+        private val officeNumber = binding.tvPhoneNumber
+        private val reviewButton = binding.cvReview
+
+        override fun bind(item: PlaceDetailItem) {
+            if (item is PlaceDetailItem.PlaceInfo) {
+                officeAddress.text = item.address
+                officeBusinessHour.text = item.businessHour
+                officeNumber.text = item.phone
+            }
+        }
+
+    }
+
+    inner class DetailImageHolder(binding: RvItemPlaceDetailImageBinding) :
+        BaseViewHolder<PlaceDetailItem>(binding.root) {
         private val officeImageView = binding.ivItemImage
-        private val officeNameTextView = binding.tvItemName
-        private val officeRatingTextView = binding.tvItemRating
 
-        override fun bind(item: Office) {
-            if (item is Office.OfficeItem) {
+        override fun bind(item: PlaceDetailItem) {
+            if (item is PlaceDetailItem.PlaceImage) {
                 officeImageView.load(item.image) {
                     crossfade(true)
                 }
-                officeNameTextView.text = item.name
-                officeRatingTextView.text = item.rating
             }
         }
     }

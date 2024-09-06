@@ -82,7 +82,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     private fun initLocationSpinner() {
-        val items = listOf("강릉", "속초", "동해", "춘천")
+        val items = listOf("강릉", "동해", "속초", "춘천")
         val spinnerAdapter =
             ArrayAdapter(requireContext(), R.layout.custom_spinner_item, items)
         spinnerAdapter.setDropDownViewResource(R.layout.custom_spinner_item)

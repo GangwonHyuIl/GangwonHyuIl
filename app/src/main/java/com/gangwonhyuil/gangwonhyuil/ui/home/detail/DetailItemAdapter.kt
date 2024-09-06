@@ -12,13 +12,13 @@ class DetailItemAdapter() : BaseAdapter<PlaceDetailItem>() {
     override fun createBinding(parent: ViewGroup, viewType: Int): ViewBinding {
         return when (viewType) {
             PlaceDetailViewType.PLACE_CONTENT.type -> {
-                RvItemPlaceDetailImageBinding.inflate(
+                RvItemPlaceDetailInfoBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
             }
 
             PlaceDetailViewType.PLACE_IMAGE.type -> {
-                RvItemPlaceDetailInfoBinding.inflate(
+                RvItemPlaceDetailImageBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
             }

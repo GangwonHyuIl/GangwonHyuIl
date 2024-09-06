@@ -15,6 +15,7 @@ import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivityAddPostBinding
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.addPlace.AddPlaceActivity
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -142,11 +143,23 @@ class AddPostActivity :
                 "삭제"
             ) { _, _ ->
                 viewModel.onDeletePlaceList(placeListId)
+                showDeletePlaceListSnackBar(placeListId)
             }.setNegativeButton(
                 "취소"
             ) { _, _ -> } // do nothing
 
         builder.show()
+    }
+
+    private fun showDeletePlaceListSnackBar(placeListId: String) {
+        Snackbar
+            .make(
+                binding.root,
+                "장소 목록이 삭제되었습니다.",
+                Snackbar.LENGTH_LONG
+            ).setAction("삭제 취소") {
+                viewModel.undonDeletePlaceList(placeListId)
+            }.show()
     }
 
     override fun onAddPlaceClick(placeListId: String) {
@@ -160,6 +173,18 @@ class AddPostActivity :
 
     override fun onDeletePlaceClick(placeId: String) {
         viewModel.onDeletePlace(placeId)
+        showDeletePlaceSnackBar(placeId)
+    }
+
+    private fun showDeletePlaceSnackBar(placeId: String) {
+        Snackbar
+            .make(
+                binding.root,
+                "장소가 삭제되었습니다.",
+                Snackbar.LENGTH_LONG
+            ).setAction("삭제 취소") {
+                viewModel.undonDeletePlace(placeId)
+            }.show()
     }
 
     override fun onAddPlaceListClick() {

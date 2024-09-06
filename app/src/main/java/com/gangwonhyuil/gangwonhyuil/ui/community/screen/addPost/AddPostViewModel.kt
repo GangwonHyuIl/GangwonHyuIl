@@ -20,6 +20,9 @@ class AddPostViewModel
         private val _placeLists = MutableStateFlow<List<AddPostItem.PlaceList>>(emptyList())
         private val _places = MutableStateFlow<List<AddPostItem.Place>>(emptyList())
 
+        private var deletedPlaceList: AddPostItem.PlaceList? = null
+        private var deletedPlaces: List<AddPostItem.Place> = emptyList()
+
         private val _addPostItems = MutableStateFlow<List<AddPostItem>>(emptyList())
         val addPostItems = _addPostItems.asStateFlow()
 
@@ -82,12 +85,27 @@ class AddPostViewModel
         }
 
         fun onDeletePlaceList(placeListId: String) {
+            deletedPlaceList = _placeLists.value.find { it.id == placeListId }
+            deletedPlaces = _places.value.filter { it.placeListId == placeListId }
+
             _placeLists.update { placeLists ->
-                placeLists.filter { it.id != placeListId }
+                placeLists - deletedPlaceList!!
             }
             _places.update { places ->
-                places.filter { it.placeListId != placeListId }
+                places - deletedPlaces.toSet()
             }
+        }
+
+        fun undonDeletePlaceList(placeListId: String) {
+            _placeLists.update { placeLists ->
+                placeLists + deletedPlaceList!!
+            }
+            _places.update { places ->
+                places + deletedPlaces
+            }
+            // reset deleted place list & places
+            deletedPlaceList = null
+            deletedPlaces = emptyList()
         }
 
         fun onAddPlace(place: AddPostItem.Place) {
@@ -97,9 +115,18 @@ class AddPostViewModel
         }
 
         fun onDeletePlace(placeId: String) {
+            deletedPlaces = _places.value.filter { it.id == placeId }
             _places.update { places ->
-                places.filter { it.id != placeId }
+                places - deletedPlaces.toSet()
             }
+        }
+
+        fun undonDeletePlace(placeId: String) {
+            _places.update { places ->
+                places + deletedPlaces
+            }
+            // reset deleted places
+            deletedPlaces = emptyList()
         }
 
         fun onAddPlaceList() {

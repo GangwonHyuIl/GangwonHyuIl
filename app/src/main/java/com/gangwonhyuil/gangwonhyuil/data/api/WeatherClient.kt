@@ -1,8 +1,7 @@
 package com.gangwonhyuil.gangwonhyuil.data.api
 
 import com.gangwonhyuil.gangwonhyuil.BuildConfig
-import com.gangwonhyuil.gangwonhyuil.data.remote.wether.WeatherService
-import com.google.gson.GsonBuilder
+import com.gangwonhyuil.gangwonhyuil.data.remote.wether.WeatherDataSource
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -11,7 +10,6 @@ import java.util.concurrent.TimeUnit
 
 object WeatherClient {
     private const val WEATHER_BASE_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/"
-    private val gson = GsonBuilder().setLenient().create()
     private fun createOkHttpClient(): OkHttpClient {
         val interceptor = HttpLoggingInterceptor()
 
@@ -33,5 +31,5 @@ object WeatherClient {
         .client(createOkHttpClient())
         .build()
 
-    val weatherNetWork: WeatherService = weatherRetrofit.create(WeatherService::class.java)
+    val weatherNetWork: WeatherDataSource = weatherRetrofit.create(WeatherDataSource::class.java)
 }

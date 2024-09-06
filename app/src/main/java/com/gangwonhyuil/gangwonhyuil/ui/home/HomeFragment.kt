@@ -14,6 +14,10 @@ import com.gangwonhyuil.gangwonhyuil.util.base.BaseFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Locale
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
@@ -30,13 +34,55 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupViewPager()
+        collectWeatherData()
+        displayDateData()
+
+        initViewPager()
         initLocationSpinner()
         initViewModelObserver()
+
+    }
+
+    private fun collectWeatherData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.weatherData.collect { weatherData ->
+                weatherData.forEach { (category, value) ->
+                    displayWeatherData(category, value)
+                }
+            }
+        }
+    }
+
+    private fun displayDateData() {
+        val today = LocalDate.now()
+
+        val formatter = DateTimeFormatter.ofPattern("MM/dd")
+        val formattedDate = today.format(formatter)
+        val formattedDay = today.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN)
+
+        binding.tvDate.text = "${formattedDate} (${formattedDay})"
+    }
+
+    private fun displayWeatherData(category: String, value: String) {
+        when (category) {
+            "POP" -> {
+                binding.tvRainInfo.text = "${value}%"
+            }
+
+            "PTY" -> {
+                when (value) {
+                    "0" -> binding.ivWeather.setImageResource(R.drawable.ic_sunny)
+                    "1" -> binding.ivWeather.setImageResource(R.drawable.ic_rainy)
+                    "2" -> binding.ivWeather.setImageResource(R.drawable.ic_snowrain)
+                    "3" -> binding.ivWeather.setImageResource(R.drawable.ic_snowy)
+                    "4" -> binding.ivWeather.setImageResource(R.drawable.ic_rainthunder)
+                }
+            }
+        }
     }
 
     private fun initLocationSpinner() {
-        val items = listOf("강릉", "속초", "동해", "춘천")
+        val items = listOf("강릉", "동해", "속초", "춘천")
         val spinnerAdapter =
             ArrayAdapter(requireContext(), R.layout.custom_spinner_item, items)
         spinnerAdapter.setDropDownViewResource(R.layout.custom_spinner_item)
@@ -50,8 +96,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     position: Int,
                     id: Long
                 ) {
-                    val selectedItem = parent?.getItemAtPosition(position).toString()
-                    viewModel.updateSelectedLocation(selectedItem)
+                    parent?.getItemAtPosition(position).let {
+                        viewModel.updateSelectedLocationXY(it.toString())
+                    }
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -60,7 +107,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             }
     }
 
-    private fun setupViewPager() {
+    private fun initViewPager() {
         val viewPager = binding.vpViewpagerMain
         val tabLayout = binding.tlTabLayout
 
@@ -79,8 +126,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private fun initViewModelObserver() {
         lifecycleScope.launch {
-            viewModel.selectedLocation.collect { location ->
-
+            viewModel.selectedLocationXY.collect { locationXY ->
+                viewModel.fetchWeatherConditions(locationXY)
             }
         }
     }

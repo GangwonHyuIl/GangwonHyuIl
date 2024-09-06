@@ -7,21 +7,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gangwonhyuil.gangwonhyuil.databinding.FragmentOfficeInfoBinding
+import com.gangwonhyuil.gangwonhyuil.databinding.FragmentPlaceInfoBinding
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class OfficeInfoFragment : BaseFragment<FragmentOfficeInfoBinding>() {
+class OfficeInfoFragment : BaseFragment<FragmentPlaceInfoBinding>() {
     private val viewModel: OfficeViewModel by viewModels()
-    private lateinit var officeAdapter: OfficeAdapter
+    private lateinit var placeAdapter: PlaceAdapter
 
     override fun inflateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
-    ): FragmentOfficeInfoBinding = FragmentOfficeInfoBinding.inflate(inflater, container, false)
+    ): FragmentPlaceInfoBinding = FragmentPlaceInfoBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(
         view: View,
@@ -36,23 +36,23 @@ class OfficeInfoFragment : BaseFragment<FragmentOfficeInfoBinding>() {
 
     private fun setCategoryTitle() {
         val category = arguments?.getString(ARG_CATEGORY) ?: "카테고리 없음"
-        Timber.d(category)
-        viewModel.loadOfficeData(category)
+        Timber.d("카테고리: $category")
+        viewModel.fetchAreaBasedRestaurantList(category)
     }
 
     private fun initRecyclerView() {
-        officeAdapter = OfficeAdapter()
+        placeAdapter = PlaceAdapter()
 
         binding.rvOffice.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = officeAdapter
+            adapter = placeAdapter
         }
     }
 
     private fun observeViewModel() {
         lifecycleScope.launch {
-            viewModel.officeList.collect { officeList ->
-                officeAdapter.submitList(officeList)
+            viewModel.itemList.collect { officeList ->
+                placeAdapter.submitList(officeList)
             }
         }
     }

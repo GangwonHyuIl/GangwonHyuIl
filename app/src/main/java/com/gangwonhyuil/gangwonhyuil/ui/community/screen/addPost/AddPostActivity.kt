@@ -81,7 +81,7 @@ class AddPostActivity :
             }
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.register_post -> {
+                    R.id.add_post_register -> {
                         if (viewModel.registerState is RegisterState.AbleToRegister) {
                             viewModel.registerPost()
                             finish()

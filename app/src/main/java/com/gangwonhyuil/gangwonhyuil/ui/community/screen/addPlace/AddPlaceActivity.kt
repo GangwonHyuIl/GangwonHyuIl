@@ -64,7 +64,7 @@ class AddPlaceActivity : BaseActivity<ActivityAddPlaceBinding>() {
             }
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.add_place -> {
+                    R.id.add_place_add -> {
                         val newPlace = viewModel.createPlace()
                         setResult(
                             RESULT_OK,

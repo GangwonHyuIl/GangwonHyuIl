@@ -28,7 +28,7 @@ class SearchResultItemAdapter(
         private val tvPlaceName = binding.tvPlaceName
         private val tvPlaceCategoryGroup = binding.tvPlaceCategoryGroup
         private val tvPlaceAddress = binding.tvPlaceAddress
-        private val lyPlacePin = binding.lyPlacePin
+        private val lyReadingGlasses = binding.lyReadingGlasses
 
         override fun bind(item: SearchResultItem) {
             tvPlaceName.text = item.name
@@ -43,8 +43,8 @@ class SearchResultItemAdapter(
                 onClickListener.onItemClick(item)
             }
 
-            lyPlacePin.setOnClickListener {
-                onClickListener.onPinClick(item)
+            lyReadingGlasses.setOnClickListener {
+                onClickListener.onReadingGlassesClick(item)
             }
         }
     }

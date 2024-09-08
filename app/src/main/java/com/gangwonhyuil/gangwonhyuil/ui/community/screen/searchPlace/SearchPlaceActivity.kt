@@ -23,7 +23,7 @@ const val EXTRA_PLACE_ADDRESS_RESULT = "extra_place_address_result"
 interface OnSearchResultItemClickListener {
     fun onItemClick(item: SearchResultItem)
 
-    fun onPinClick(item: SearchResultItem)
+    fun onReadingGlassesClick(item: SearchResultItem)
 }
 
 @AndroidEntryPoint
@@ -130,7 +130,7 @@ class SearchPlaceActivity :
         finish()
     }
 
-    override fun onPinClick(item: SearchResultItem) {
+    override fun onReadingGlassesClick(item: SearchResultItem) {
         startActivity(
             SearchPlaceDetailActivity.getPlaceWebViewActivityIntent(
                 context = this@SearchPlaceActivity,

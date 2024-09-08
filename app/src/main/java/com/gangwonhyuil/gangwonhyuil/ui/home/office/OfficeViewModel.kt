@@ -1,7 +1,7 @@
 package com.gangwonhyuil.gangwonhyuil.ui.home.office
 
 import com.gangwonhyuil.gangwonhyuil.BuildConfig
-import com.gangwonhyuil.gangwonhyuil.data.api.TourClient
+import com.gangwonhyuil.gangwonhyuil.data.remote.tour.TourDataSource
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,9 @@ const val TOUR_API_KEY: String = BuildConfig.TOUR_API_KEY
 @HiltViewModel
 class OfficeViewModel
     @Inject
-    constructor() : BaseViewModel() {
+    constructor(
+        private val tourClient: TourDataSource,
+    ) : BaseViewModel() {
         private val _itemList = MutableStateFlow<List<PlaceItem>>(emptyList())
         val itemList: StateFlow<List<PlaceItem>> get() = _itemList
 
@@ -31,7 +33,7 @@ class OfficeViewModel
             viewModelScopeEH.launch {
                 try {
                     val response =
-                        TourClient.tourNetWork.getAreaBasedList(
+                        tourClient.getAreaBasedList(
                             numOfRows = 10,
                             pageNo = 1,
                             contentTypeId = params.contentTypeId,
@@ -46,7 +48,7 @@ class OfficeViewModel
                     if (response.isSuccessful) {
                         response.body()?.let { responseBody ->
                             Timber.d("response 성공: ${response.body()}")
-                            val items = responseBody.response.body.items.item ?: emptyList()
+                            val items = responseBody.response.body.items.item
 
                             val officeItems =
                                 items.map { apiItem ->

@@ -1,7 +1,7 @@
 package com.gangwonhyuil.gangwonhyuil.ui.home
 
 import com.gangwonhyuil.gangwonhyuil.BuildConfig
-import com.gangwonhyuil.gangwonhyuil.data.api.WeatherClient
+import com.gangwonhyuil.gangwonhyuil.data.remote.wether.WeatherDataSource
 import com.gangwonhyuil.gangwonhyuil.data.response.weather.Item
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,9 @@ const val WEATHER_API_KEY: String = BuildConfig.WEATHER_API_KEY
 @HiltViewModel
 class HomeViewModel
     @Inject
-    constructor() : BaseViewModel() {
+    constructor(
+        private val weatherClient: WeatherDataSource,
+    ) : BaseViewModel() {
         private val _selectedLocationXY = MutableStateFlow<List<Int>>(emptyList())
         val selectedLocationXY: StateFlow<List<Int>> get() = _selectedLocationXY
 
@@ -45,7 +47,7 @@ class HomeViewModel
                     getCurrentDateFormatted()
                     getBaseTimeFormatted()
                     val response =
-                        WeatherClient.weatherNetWork.getWeather(
+                        weatherClient.getWeather(
                             serviceKey = WEATHER_API_KEY,
                             numOfRow = 12,
                             dataType = "JSON",

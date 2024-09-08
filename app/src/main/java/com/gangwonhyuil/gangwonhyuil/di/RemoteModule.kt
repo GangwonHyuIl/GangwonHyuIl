@@ -46,7 +46,7 @@ object RemoteModule {
 
         return Retrofit
             .Builder()
-            .baseUrl(WEATHER_BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()

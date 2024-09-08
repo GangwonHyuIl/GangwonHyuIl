@@ -44,7 +44,7 @@ class SearchResultItemAdapter(
             }
 
             lyPlacePin.setOnClickListener {
-                onClickListener.onPinClick(item.url)
+                onClickListener.onPinClick(item)
             }
         }
     }

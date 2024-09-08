@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivitySearchPlaceBinding
+import com.gangwonhyuil.gangwonhyuil.ui.community.screen.searchPlaceDetail.SearchPlaceDetailActivity
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 const val EXTRA_PLACE_NAME_RESULT = "extra_place_name_result"
 const val EXTRA_PLACE_ADDRESS_RESULT = "extra_place_address_result"
@@ -23,7 +23,7 @@ const val EXTRA_PLACE_ADDRESS_RESULT = "extra_place_address_result"
 interface OnSearchResultItemClickListener {
     fun onItemClick(item: SearchResultItem)
 
-    fun onPinClick(url: String)
+    fun onPinClick(item: SearchResultItem)
 }
 
 @AndroidEntryPoint
@@ -130,9 +130,14 @@ class SearchPlaceActivity :
         finish()
     }
 
-    override fun onPinClick(url: String) {
-        // TODO: start web view activity
-        Timber.d("url: $url")
+    override fun onPinClick(item: SearchResultItem) {
+        startActivity(
+            SearchPlaceDetailActivity.getPlaceWebViewActivityIntent(
+                context = this@SearchPlaceActivity,
+                placeName = item.name,
+                placeUrl = item.url
+            )
+        )
     }
 
     companion object {

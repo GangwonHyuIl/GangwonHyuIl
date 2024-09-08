@@ -8,5 +8,6 @@ interface KakaoLocalDataSource {
     @GET("search/keyword.json")
     suspend fun searchViaKeyword(
         @Query("query") query: String,
+        @Query("page") searchPage: Int,
     ): SearchViaKeywordResponse
 }

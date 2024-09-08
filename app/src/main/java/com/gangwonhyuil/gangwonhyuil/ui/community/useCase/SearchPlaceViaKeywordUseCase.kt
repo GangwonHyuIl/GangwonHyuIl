@@ -12,29 +12,38 @@ class SearchPlaceViaKeywordUseCase
     constructor(
         private val kakaoLocalDataSource: KakaoLocalDataSource,
     ) {
-        suspend operator fun invoke(keyword: String): List<SearchResultItem> =
-            when (val customResponse = searchViaKeyword(keyword)) {
+        suspend operator fun invoke(
+            keyword: String,
+            searchPage: Int,
+        ): Pair<List<SearchResultItem>, Boolean> =
+            when (val customResponse = searchViaKeyword(keyword, searchPage)) {
                 is CustomResponse.Success<*> -> {
-                    (customResponse.data as SearchViaKeywordResponse).documents.map {
-                        SearchResultItem(
-                            id = it.id,
-                            categoryGroup = it.categoryName,
-                            name = it.placeName,
-                            roadAddress = it.roadAddressName,
-                            url = it.placeUrl
-                        )
-                    }
+                    val resultItems =
+                        (customResponse.data as SearchViaKeywordResponse).documents.map {
+                            SearchResultItem(
+                                id = it.id,
+                                categoryGroup = it.categoryName,
+                                name = it.placeName,
+                                roadAddress = it.roadAddressName,
+                                url = it.placeUrl
+                            )
+                        }
+                    val isEnd = customResponse.data.meta.isEnd
+                    Pair(resultItems, isEnd)
                 }
 
                 is CustomResponse.Failure -> {
                     Timber.e(customResponse.e)
-                    emptyList()
+                    Pair(emptyList(), false)
                 }
             }
 
-        private suspend fun searchViaKeyword(query: String): CustomResponse =
+        private suspend fun searchViaKeyword(
+            query: String,
+            searchPage: Int,
+        ): CustomResponse =
             try {
-                val response = kakaoLocalDataSource.searchViaKeyword(query)
+                val response = kakaoLocalDataSource.searchViaKeyword(query, searchPage)
                 CustomResponse.Success(response)
             } catch (e: Exception) {
                 CustomResponse.Failure(e)

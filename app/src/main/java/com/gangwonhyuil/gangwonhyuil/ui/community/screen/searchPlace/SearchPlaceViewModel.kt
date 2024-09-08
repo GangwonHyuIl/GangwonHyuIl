@@ -19,6 +19,13 @@ class SearchPlaceViewModel
         private val _searchResultItems = MutableStateFlow<List<SearchResultItem>>(emptyList())
         val searchResultItems = _searchResultItems.asStateFlow()
 
+        private val _searchState = MutableStateFlow<SearchState>(SearchState.Idle)
+        val searchState = _searchState.asStateFlow()
+
+        private var searchKeyword = ""
+        private var searchPage = 1
+        private var canSearchMore = false
+
         init {
             viewModelScopeEH.launch {
                 exceptions.collect {
@@ -28,10 +35,34 @@ class SearchPlaceViewModel
         }
 
         fun search(keyword: String) {
+            searchKeyword = keyword
+            searchPage = 1
             viewModelScopeEH.launch {
-                _searchResultItems.update {
-                    searchPlaceViaKeyword(keyword)
+                val (result, isEnd) = searchPlaceViaKeyword(searchKeyword, searchPage)
+                if (result.isEmpty()) {
+                    _searchState.update { SearchState.NoResult }
+                } else {
+                    _searchState.update { SearchState.Idle }
                 }
+
+                canSearchMore = !isEnd
+                _searchResultItems.update { result }
+            }
+        }
+
+        fun searchMore() {
+            if (!canSearchMore) return
+
+            viewModelScopeEH.launch {
+                val (moreResultItems, isEnd) = searchPlaceViaKeyword(searchKeyword, ++searchPage)
+                canSearchMore = !isEnd
+                _searchResultItems.update { it + moreResultItems }
             }
         }
     }
+
+interface SearchState {
+    data object Idle : SearchState
+
+    data object NoResult : SearchState
+}

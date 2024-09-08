@@ -4,9 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivitySearchPlaceBinding
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,7 +72,24 @@ class SearchPlaceActivity :
 
     private fun initSearchResultRecyclerView() {
         searchResultItemAdapter = SearchResultItemAdapter(this@SearchPlaceActivity)
-        binding.rvSearchResult.adapter = searchResultItemAdapter
+        with(binding.rvSearchResult) {
+            adapter = searchResultItemAdapter
+            animation = null
+            addOnScrollListener(
+                object : OnScrollListener() {
+                    override fun onScrolled(
+                        recyclerView: RecyclerView,
+                        dx: Int,
+                        dy: Int,
+                    ) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        val lastVisibleItemPosition =
+                            (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                        if (lastVisibleItemPosition == searchResultItemAdapter.itemCount - 1) viewModel.searchMore()
+                    }
+                }
+            )
+        }
     }
 
     private fun initViewModelObserver() {
@@ -76,6 +97,22 @@ class SearchPlaceActivity :
             lifecycleScope.launch {
                 searchResultItems.collect {
                     searchResultItemAdapter.submitList(it)
+                }
+            }
+
+            lifecycleScope.launch {
+                searchState.collect {
+                    when (it) {
+                        SearchState.Idle -> {
+                            binding.rvSearchResult.visibility = View.VISIBLE
+                            binding.tvNoResult.visibility = View.GONE
+                        }
+
+                        SearchState.NoResult -> {
+                            binding.rvSearchResult.visibility = View.GONE
+                            binding.tvNoResult.visibility = View.VISIBLE
+                        }
+                    }
                 }
             }
         }

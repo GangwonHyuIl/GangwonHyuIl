@@ -46,12 +46,22 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        tools:visibility="gone"
         android:id="@+id/rv_search_result"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/rv_item_search_place" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="검색 결과가 없습니다"
+        android:gravity="center"
+        android:paddingHorizontal="16dp"/>
 
 
 </LinearLayout>

@@ -52,7 +52,7 @@ class CommunityFragment :
         with(binding.topAppBar) {
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.add_post -> {
+                    R.id.community_add_post -> {
                         startActivity(
                             AddPostActivity.getAddPostActivityIntent(
                                 requireContext()

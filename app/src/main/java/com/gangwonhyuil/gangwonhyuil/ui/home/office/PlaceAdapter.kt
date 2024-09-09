@@ -7,7 +7,9 @@ import coil.load
 import com.gangwonhyuil.gangwonhyuil.databinding.RvItemPlaceBinding
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseAdapter
 
-class PlaceAdapter : BaseAdapter<PlaceItem>() {
+class PlaceAdapter(
+    private val placeItemClickListener: OnPlaceItemClickListener,
+) : BaseAdapter<PlaceItem>() {
     override fun createBinding(
         parent: ViewGroup,
         viewType: Int,
@@ -28,12 +30,20 @@ class PlaceAdapter : BaseAdapter<PlaceItem>() {
         private val officeNameTextView = binding.tvItemName
         private val officeRatingTextView = binding.tvItemRating
 
-        override fun bind(item: PlaceItem) {
-            officeImageView.load(item.image) {
+        override fun bind(placeItem: PlaceItem) {
+            officeImageView.load(placeItem.image) {
                 crossfade(true)
             }
-            officeNameTextView.text = item.name
+            officeNameTextView.text = placeItem.name
 //                officeRatingTextView.text = item.rating
+
+            setOnClickListener(placeItem)
+        }
+
+        private fun setOnClickListener(placeItem: PlaceItem) {
+            itemView.setOnClickListener {
+                placeItemClickListener.onPlaceItemClick(placeItem.id)
+            }
         }
     }
 }

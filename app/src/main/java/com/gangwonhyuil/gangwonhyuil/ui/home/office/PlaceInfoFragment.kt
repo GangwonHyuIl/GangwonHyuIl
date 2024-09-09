@@ -58,7 +58,7 @@ class PlaceInfoFragment : BaseFragment<FragmentPlaceInfoBinding>(),
         }
         lifecycleScope.launch {
             viewModel.sigunguCode.collect {
-                viewModel.fetchAllCategories()
+                viewModel.fetchTourAPICategories()
             }
         }
     }

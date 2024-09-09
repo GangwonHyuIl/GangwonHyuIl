@@ -133,5 +133,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 viewModel.fetchWeatherConditions(locationXY)
             }
         }
+        lifecycleScope.launch {
+            placeViewModel.officeLocation.collect {
+                placeViewModel.getOfficeList()
+            }
+        }
     }
 }

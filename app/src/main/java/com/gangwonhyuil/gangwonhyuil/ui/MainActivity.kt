@@ -7,11 +7,13 @@ import androidx.viewpager2.widget.ViewPager2
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivityMainBinding
 import com.gangwonhyuil.gangwonhyuil.ui.ai.AiFragment
-import com.gangwonhyuil.gangwonhyuil.ui.community.CommunityFragment
+import com.gangwonhyuil.gangwonhyuil.ui.community.screen.community.CommunityFragment
 import com.gangwonhyuil.gangwonhyuil.ui.home.HomeFragment
 import com.gangwonhyuil.gangwonhyuil.ui.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

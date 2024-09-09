@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/add_place"
+        android:id="@+id/add_place_add"
         android:title="추가"
         android:contentDescription="장소 추가"
         app:showAsAction="always"

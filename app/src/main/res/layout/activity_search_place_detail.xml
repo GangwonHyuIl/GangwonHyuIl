@@ -2,25 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.community.screen.community.CommunityFragment">
+    tools:context=".ui.community.screen.searchPlaceDetail.SearchPlaceDetailActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/top_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        app:menu="@menu/community_top_app_bar"
-        app:title="커뮤니티" />
+        app:navigationIcon="@drawable/ic_arrow_backward_24" />
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_post"
+    <WebView
+        android:id="@+id/wv_place_detail"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/rv_item_community" />
+        android:layout_height="match_parent" />
 </LinearLayout>

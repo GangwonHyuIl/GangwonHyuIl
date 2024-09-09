@@ -1,8 +1,7 @@
 package com.gangwonhyuil.gangwonhyuil.ui.home.office
 
 import com.gangwonhyuil.gangwonhyuil.BuildConfig
-import com.gangwonhyuil.gangwonhyuil.data.api.OfficeClient
-import com.gangwonhyuil.gangwonhyuil.data.api.TourClient
+import com.gangwonhyuil.gangwonhyuil.data.remote.tour.TourDataSource
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +15,11 @@ const val TOUR_API_KEY: String = BuildConfig.TOUR_API_KEY
 const val EXTRA_PLACE_ID = "extra_place_id"
 
 @HiltViewModel
-class PlaceViewModel @Inject constructor() : BaseViewModel() {
+class PlaceViewModel
+@Inject
+constructor(
+    private val tourClient: TourDataSource,
+) : BaseViewModel() {
     private val _sigunguCode = MutableStateFlow<String>("")
     val sigunguCode: StateFlow<String> get() = _sigunguCode
 
@@ -29,7 +32,7 @@ class PlaceViewModel @Inject constructor() : BaseViewModel() {
             categories.forEach { category ->
                 fetchAreaBasedRestaurantList(category)
             }
-            getOfficeList()
+//            getOfficeList()
         }
     }
 
@@ -61,17 +64,18 @@ class PlaceViewModel @Inject constructor() : BaseViewModel() {
 
         viewModelScopeEH.launch {
             try {
-                val response = TourClient.tourNetWork.getAreaBasedList(
-                    numOfRows = 10,
-                    pageNo = 1,
-                    contentTypeId = params.contentTypeId,
-                    areaCode = "32",
-                    sigunguCode = sigunguCode.value,
-                    cat1 = params.cat1,
-                    cat2 = params.cat2,
-                    cat3 = params.cat3,
-                    serviceKey = TOUR_API_KEY
-                )
+                val response =
+                    tourClient.getAreaBasedList(
+                        numOfRows = 10,
+                        pageNo = 1,
+                        contentTypeId = params.contentTypeId,
+                        areaCode = "32",
+                        sigunguCode = sigunguCode.value,
+                        cat1 = params.cat1,
+                        cat2 = params.cat2,
+                        cat3 = params.cat3,
+                        serviceKey = TOUR_API_KEY
+                    )
 
                 if (response.isSuccessful) {
                     response.body()?.let { responseBody ->
@@ -100,21 +104,21 @@ class PlaceViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
-    private suspend fun getOfficeList() {
-        try {
-            val response = OfficeClient.officeNetWork.getOfficeList(
-                "eq.0"
-            )
-            if (response.isSuccessful) {
-                response.body()?.let { responseBody ->
-                    Timber.d("office response 성공: ${responseBody}")
-                }
-            } else {
-                Timber.d("office response 실패 %s", response.errorBody()?.string())
-            }
-
-        } catch (e: Exception) {
-            Timber.d("office response 에러 %s", e.message)
-        }
-    }
+//    private suspend fun getOfficeList() {
+//        try {
+//            val response = OfficeClient.officeNetWork.getOfficeList(
+//                "eq.0"
+//            )
+//            if (response.isSuccessful) {
+//                response.body()?.let { responseBody ->
+//                    Timber.d("office response 성공: ${responseBody}")
+//                }
+//            } else {
+//                Timber.d("office response 실패 %s", response.errorBody()?.string())
+//            }
+//
+//        } catch (e: Exception) {
+//            Timber.d("office response 에러 %s", e.message)
+//        }
+//    }
 }

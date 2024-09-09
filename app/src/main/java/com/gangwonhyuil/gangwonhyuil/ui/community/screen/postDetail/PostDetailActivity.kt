@@ -41,19 +41,19 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
             }
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.report_post -> {
+                    R.id.post_detail_report -> {
                         // TODO: report post
                         Timber.d("report post menu clicked")
                         true
                     }
 
-                    R.id.edit_post -> {
+                    R.id.post_detail_edit_post -> {
                         // TODO: edit post
                         Timber.d("edit post menu clicked")
                         true
                     }
 
-                    R.id.delete_post -> {
+                    R.id.post_detail_delete_post -> {
                         // TODO: delete post
                         Timber.d("delete post menu clicked")
                         true

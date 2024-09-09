@@ -11,29 +11,31 @@ android {
     namespace = "com.gangwonhyuil.gangwonhyuil"
     compileSdk = 34
 
-    val isCiEnvironment = System.getenv("CI") == "true"
-    val weatherApiKey: String = if (isCiEnvironment) {
-        System.getenv("WEATHER_API_KEY") ?: throw GradleException("WEATHER_API_KEY is not set in CI environment")
+    lateinit var weatherApiKey: String
+    lateinit var tourApiKey: String
+    lateinit var kakoLocalApiKey: String
+
+    if (System.getenv("CI") == "true") {
+        weatherApiKey = System.getenv("WEATHER_API_KEY")
+            ?: throw GradleException("WEATHER_API_KEY is not set in CI environment")
+        tourApiKey = System.getenv("TOUR_API_KEY")
+            ?: throw GradleException("TOUR_API_KEY is not set in CI environment")
+        kakoLocalApiKey = System.getenv("KAKAO_LOCAL_API_KEY")
+            ?: throw GradleException("KAKAO_LOCAL_API_KEY is not set in CI environment")
     } else {
         val properties = Properties()
         val localPropertiesFile = project.rootProject.file("local.properties")
         if (localPropertiesFile.exists()) {
             properties.load(localPropertiesFile.inputStream())
-            properties.getProperty("WEATHER_API_KEY")
+
+            weatherApiKey = properties.getProperty("WEATHER_API_KEY")
+                ?: throw GradleException("WEATHER_API_KEY is not set in local.properties")
+            tourApiKey = properties.getProperty("TOUR_API_KEY")
+                ?: throw GradleException("TOUR_API_KEY is not set in local.properties")
+            kakoLocalApiKey = properties.getProperty("KAKAO_LOCAL_API_KEY")
+                ?: throw GradleException("KAKAO_LOCAL_API_KEY is not set in local.properties")
         } else {
-            throw GradleException("local.properties file not found and WEATHER_API_KEY is not set")
-        }
-    }
-    val tourApiKey: String = if (isCiEnvironment) {
-        System.getenv("TOUR_API_KEY") ?: throw GradleException("TOUR_API_KEY is not set in CI environment")
-    } else {
-        val properties = Properties()
-        val localPropertiesFile = project.rootProject.file("local.properties")
-        if (localPropertiesFile.exists()) {
-            properties.load(localPropertiesFile.inputStream())
-            properties.getProperty("TOUR_API_KEY")
-        } else {
-            throw GradleException("local.properties file not found and TOUR_API_KEY is not set")
+            throw GradleException("local.properties file not found")
         }
     }
 
@@ -48,7 +50,7 @@ android {
 
         buildConfigField("String", "WEATHER_API_KEY", "$weatherApiKey")
         buildConfigField("String", "TOUR_API_KEY", "$tourApiKey")
-
+        buildConfigField("String", "KAKAO_LOCAL_API_KEY", "$kakoLocalApiKey")
     }
 
     buildTypes {
@@ -87,7 +89,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
-    implementation (libs.timber)
+    implementation(libs.timber)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

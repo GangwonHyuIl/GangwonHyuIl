@@ -20,8 +20,14 @@ class AddPostViewModel
         private val _placeLists = MutableStateFlow<List<AddPostItem.PlaceList>>(emptyList())
         private val _places = MutableStateFlow<List<AddPostItem.Place>>(emptyList())
 
+        private var deletedPlaceList: AddPostItem.PlaceList? = null
+        private var deletedPlaces: List<AddPostItem.Place> = emptyList()
+
         private val _addPostItems = MutableStateFlow<List<AddPostItem>>(emptyList())
         val addPostItems = _addPostItems.asStateFlow()
+
+        private var _registerState: RegisterState = RegisterState.EmptyContent
+        val registerState: RegisterState get() = _registerState
 
         init {
             viewModelScopeEH.launch {
@@ -31,6 +37,7 @@ class AddPostViewModel
             }
 
             combine(_content, _placeLists, _places) { content, placeLists, places ->
+                // set post items for recycler view
                 val items =
                     mutableListOf<AddPostItem>().apply {
                         add(content)
@@ -41,8 +48,24 @@ class AddPostViewModel
                         }
                         add(AddPostItem.AddPlaceList)
                     }
-
                 _addPostItems.update { items }
+
+                // set register state
+                _registerState =
+                    if (content.content.isEmpty()) {
+                        RegisterState.EmptyContent
+                    } else if (placeLists.any { it.name.isEmpty() }) {
+                        RegisterState.EmptyPlaceListName
+                    } else {
+                        var isAnyPlaceListEmpty = false
+                        for (placeList in placeLists) {
+                            if (places.none { it.placeListId == placeList.id }) {
+                                isAnyPlaceListEmpty = true
+                                break
+                            }
+                        }
+                        if (isAnyPlaceListEmpty) RegisterState.EmptyPlaceList else RegisterState.AbleToRegister
+                    }
             }.launchIn(viewModelScopeEH)
         }
 
@@ -62,12 +85,27 @@ class AddPostViewModel
         }
 
         fun onDeletePlaceList(placeListId: String) {
+            deletedPlaceList = _placeLists.value.find { it.id == placeListId }
+            deletedPlaces = _places.value.filter { it.placeListId == placeListId }
+
             _placeLists.update { placeLists ->
-                placeLists.filter { it.id != placeListId }
+                placeLists - deletedPlaceList!!
             }
             _places.update { places ->
-                places.filter { it.placeListId != placeListId }
+                places - deletedPlaces.toSet()
             }
+        }
+
+        fun undonDeletePlaceList(placeListId: String) {
+            _placeLists.update { placeLists ->
+                placeLists + deletedPlaceList!!
+            }
+            _places.update { places ->
+                places + deletedPlaces
+            }
+            // reset deleted place list & places
+            deletedPlaceList = null
+            deletedPlaces = emptyList()
         }
 
         fun onAddPlace(place: AddPostItem.Place) {
@@ -77,9 +115,18 @@ class AddPostViewModel
         }
 
         fun onDeletePlace(placeId: String) {
+            deletedPlaces = _places.value.filter { it.id == placeId }
             _places.update { places ->
-                places.filter { it.id != placeId }
+                places - deletedPlaces.toSet()
             }
+        }
+
+        fun undonDeletePlace(placeId: String) {
+            _places.update { places ->
+                places + deletedPlaces
+            }
+            // reset deleted places
+            deletedPlaces = emptyList()
         }
 
         fun onAddPlaceList() {
@@ -93,3 +140,23 @@ class AddPostViewModel
             Timber.d("registerPost")
         }
     }
+
+sealed interface RegisterState {
+    val message: String
+
+    data object AbleToRegister : RegisterState {
+        override val message = ""
+    }
+
+    data object EmptyContent : RegisterState {
+        override val message = "게시글 내용을 입력해주세요"
+    }
+
+    data object EmptyPlaceListName : RegisterState {
+        override val message = "장소 목록 이름을 입력해주세요"
+    }
+
+    data object EmptyPlaceList : RegisterState {
+        override val message = "장소 목록에 장소를 추가해주세요"
+    }
+}

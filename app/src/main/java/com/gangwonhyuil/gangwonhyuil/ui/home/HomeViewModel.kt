@@ -18,6 +18,7 @@ const val WEATHER_API_KEY = BuildConfig.WEATHER_API_KEY
 
 @HiltViewModel
 class HomeViewModel @Inject constructor() : BaseViewModel() {
+
     private val _selectedLocationXY = MutableStateFlow<List<Int>>(emptyList())
     val selectedLocationXY: StateFlow<List<Int>> get() = _selectedLocationXY
 

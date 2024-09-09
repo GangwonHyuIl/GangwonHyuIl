@@ -3,14 +3,41 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.google.dagger.hilt.android)
 }
-
-val properties = Properties()
-properties.load(project.rootProject.file("local.properties").inputStream())
 
 android {
     namespace = "com.gangwonhyuil.gangwonhyuil"
     compileSdk = 34
+
+    lateinit var weatherApiKey: String
+    lateinit var tourApiKey: String
+    lateinit var kakoLocalApiKey: String
+
+    if (System.getenv("CI") == "true") {
+        weatherApiKey = System.getenv("WEATHER_API_KEY")
+            ?: throw GradleException("WEATHER_API_KEY is not set in CI environment")
+        tourApiKey = System.getenv("TOUR_API_KEY")
+            ?: throw GradleException("TOUR_API_KEY is not set in CI environment")
+        kakoLocalApiKey = System.getenv("KAKAO_LOCAL_API_KEY")
+            ?: throw GradleException("KAKAO_LOCAL_API_KEY is not set in CI environment")
+    } else {
+        val properties = Properties()
+        val localPropertiesFile = project.rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            properties.load(localPropertiesFile.inputStream())
+
+            weatherApiKey = properties.getProperty("WEATHER_API_KEY")
+                ?: throw GradleException("WEATHER_API_KEY is not set in local.properties")
+            tourApiKey = properties.getProperty("TOUR_API_KEY")
+                ?: throw GradleException("TOUR_API_KEY is not set in local.properties")
+            kakoLocalApiKey = properties.getProperty("KAKAO_LOCAL_API_KEY")
+                ?: throw GradleException("KAKAO_LOCAL_API_KEY is not set in local.properties")
+        } else {
+            throw GradleException("local.properties file not found")
+        }
+    }
 
     defaultConfig {
         applicationId = "com.gangwonhyuil.gangwonhyuil"
@@ -21,7 +48,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField ("String", "GEMINI_API_KEY", properties.getProperty("GEMINI_API_KEY"))
+        buildConfigField("String", "WEATHER_API_KEY", "$weatherApiKey")
+        buildConfigField("String", "TOUR_API_KEY", "$tourApiKey")
+        buildConfigField("String", "KAKAO_LOCAL_API_KEY", "$kakoLocalApiKey")
     }
 
     buildTypes {
@@ -59,22 +88,28 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    implementation(libs.timber)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
+    implementation(libs.coil)
+
+    implementation(libs.gson)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+    implementation(libs.v2.user)
+
+    implementation(libs.generativeai)
+
+    implementation(libs.material)
+
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    implementation ("com.kakao.sdk:v2-user:2.20.3") // 카카오 로그인 API 모듈
-
-    //retrofit
-    implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:okhttp:4.11.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
-
-    //gemini
-    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
-
-    //바텀 네비
-    implementation("com.google.android.material:material:1.12.0")
 }

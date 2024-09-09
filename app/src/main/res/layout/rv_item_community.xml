@@ -8,32 +8,51 @@
     android:paddingHorizontal="16dp"
     android:paddingVertical="4dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ly_writer_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/iv_writer_profile"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:background="@drawable/shape_circle"
-            android:clipToOutline="true" />
+            android:clipToOutline="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tv_writer_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="4dp"
+            android:layout_marginVertical="4dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_post_time"
+            app:layout_constraintStart_toEndOf="@id/iv_writer_profile"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="작성자" />
-    </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_post_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2024/08/24 00:00:00" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        android:id="@+id/tv_post_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:ellipsize="end"
@@ -53,13 +72,15 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:layout_marginEnd="8dp"
+            android:id="@+id/tv_place_list_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:textSize="14sp"
             tools:text="목록 2개" />
 
         <TextView
+            android:id="@+id/tv_place_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"

@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.FragmentHomeBinding
+import com.gangwonhyuil.gangwonhyuil.ui.home.office.PlaceViewModel
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,6 +25,7 @@ import java.util.Locale
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private val viewModel: HomeViewModel by viewModels()
+    private val placeViewModel: PlaceViewModel by activityViewModels()
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -34,13 +37,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.updateSelectedLocationXY("강릉")
+        initViewModelObserver()
         collectWeatherData()
         displayDateData()
-
-        initViewPager()
         initLocationSpinner()
-        initViewModelObserver()
-
+        initViewPager()
     }
 
     private fun collectWeatherData() {
@@ -82,7 +84,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     private fun initLocationSpinner() {
-        val items = listOf("강릉", "동해", "속초", "춘천")
+        val items = listOf("춘천", "강릉", "동해", "영월", "속초", "원주")
         val spinnerAdapter =
             ArrayAdapter(requireContext(), R.layout.custom_spinner_item, items)
         spinnerAdapter.setDropDownViewResource(R.layout.custom_spinner_item)
@@ -98,6 +100,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 ) {
                     parent?.getItemAtPosition(position).let {
                         viewModel.updateSelectedLocationXY(it.toString())
+                        placeViewModel.updateSelectedLocation(it.toString())
                     }
                 }
 
@@ -128,6 +131,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         lifecycleScope.launch {
             viewModel.selectedLocationXY.collect { locationXY ->
                 viewModel.fetchWeatherConditions(locationXY)
+            }
+        }
+        lifecycleScope.launch {
+            placeViewModel.officeLocation.collect {
+                placeViewModel.getOfficeList()
             }
         }
     }

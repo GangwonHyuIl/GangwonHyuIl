@@ -1,4 +1,4 @@
-package com.gangwonhyuil.gangwonhyuil.data.remote.wether
+package com.gangwonhyuil.gangwonhyuil.data.remote.weather
 
 import com.gangwonhyuil.gangwonhyuil.data.response.weather.Weather
 import retrofit2.Response

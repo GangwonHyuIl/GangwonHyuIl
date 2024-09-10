@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import java.util.Properties
 
 plugins {
@@ -16,6 +15,7 @@ android {
     lateinit var tourApiKey: String
     lateinit var kakoLocalApiKey: String
     lateinit var geminiApiKey: String
+    lateinit var supabaseApiKey: String
 
     if (System.getenv("CI") == "true") {
         weatherApiKey = System.getenv("WEATHER_API_KEY")
@@ -26,6 +26,11 @@ android {
             ?: throw GradleException("KAKAO_LOCAL_API_KEY is not set in CI environment")
         geminiApiKey = System.getenv("GEMINI_API_KEY")
             ?: throw GradleException("GEMINI_API_KEY is not set in CI environment")
+        supabaseApiKey = System.getenv("SUPABASE_API_KEY")
+            ?: throw GradleException("SUPABASE_API_KEY is not set in CI environment")
+        geminiApiKey = System.getenv("GEMINI_API_KEY")
+            ?: throw GradleException("GEMINI_API_KEY is not set in CI environment")
+
     } else {
         val properties = Properties()
         val localPropertiesFile = project.rootProject.file("local.properties")
@@ -38,6 +43,10 @@ android {
                 ?: throw GradleException("TOUR_API_KEY is not set in local.properties")
             kakoLocalApiKey = properties.getProperty("KAKAO_LOCAL_API_KEY")
                 ?: throw GradleException("KAKAO_LOCAL_API_KEY is not set in local.properties")
+            geminiApiKey = properties.getProperty("GEMINI_API_KEY")
+                ?: throw GradleException("GEMINI_API_KEY is not set in local.properties")
+            supabaseApiKey = properties.getProperty("SUPABASE_API_KEY")
+                ?: throw GradleException("SUPABASE_API_KEY is not set in local.properties")
             geminiApiKey = properties.getProperty("GEMINI_API_KEY")
                 ?: throw GradleException("GEMINI_API_KEY is not set in local.properties")
         } else {
@@ -58,6 +67,8 @@ android {
         buildConfigField("String", "WEATHER_API_KEY", "$weatherApiKey")
         buildConfigField("String", "TOUR_API_KEY", "$tourApiKey")
         buildConfigField("String", "KAKAO_LOCAL_API_KEY", "$kakoLocalApiKey")
+        buildConfigField("String", "SUPABASE_API_KEY", "$supabaseApiKey")
+        buildConfigField("String", "GEMINI_API_KEY", "$geminiApiKey")
     }
 
     buildTypes {

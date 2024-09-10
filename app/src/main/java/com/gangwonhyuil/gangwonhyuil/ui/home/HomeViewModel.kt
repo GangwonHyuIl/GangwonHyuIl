@@ -1,7 +1,7 @@
 package com.gangwonhyuil.gangwonhyuil.ui.home
 
 import com.gangwonhyuil.gangwonhyuil.BuildConfig
-import com.gangwonhyuil.gangwonhyuil.data.remote.wether.WeatherDataSource
+import com.gangwonhyuil.gangwonhyuil.data.remote.weather.WeatherDataSource
 import com.gangwonhyuil.gangwonhyuil.data.response.weather.Item
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

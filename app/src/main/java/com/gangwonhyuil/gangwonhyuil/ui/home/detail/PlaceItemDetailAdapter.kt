@@ -8,7 +8,8 @@ import com.gangwonhyuil.gangwonhyuil.databinding.RvItemPlaceDetailImageBinding
 import com.gangwonhyuil.gangwonhyuil.databinding.RvItemPlaceDetailInfoBinding
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseAdapter
 
-class DetailItemAdapter() : BaseAdapter<PlaceDetailItem>() {
+class PlaceItemDetailAdapter(
+) : BaseAdapter<PlaceDetailItem>() {
     override fun createBinding(parent: ViewGroup, viewType: Int): ViewBinding {
         return when (viewType) {
             PlaceDetailViewType.PLACE_CONTENT.type -> {
@@ -67,5 +68,6 @@ class DetailItemAdapter() : BaseAdapter<PlaceDetailItem>() {
                 }
             }
         }
+
     }
 }

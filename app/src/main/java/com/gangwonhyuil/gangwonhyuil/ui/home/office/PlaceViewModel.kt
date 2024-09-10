@@ -36,6 +36,24 @@ constructor(
             categories.forEach { category ->
                 fetchAllPlaceCategories(category)
             }
+            fetchOfficeRatingList()
+        }
+    }
+
+    suspend fun fetchOfficeRatingList() {
+        try {
+            val response =
+                officeClient.getOfficeRatingList(listOf("2745986", "2512985"))
+
+            if (response.isSuccessful) {
+                response.body()?.let { responseBody ->
+                    Timber.d("별점 response 성공: ${response.body()}")
+                }
+            } else {
+                Timber.d("별점 response 실패 %s", response.errorBody()?.string())
+            }
+        } catch (e: Exception) {
+            Timber.d("별점 response 에러 %s", e.message)
         }
     }
 

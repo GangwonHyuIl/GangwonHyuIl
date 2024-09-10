@@ -3,6 +3,7 @@ package com.gangwonhyuil.gangwonhyuil.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivityMainBinding
 import com.gangwonhyuil.gangwonhyuil.ui.ai.AiFragment
@@ -31,42 +32,50 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewPager()
+        navigation()
+    }
 
-//        바텀 네비
-        supportFragmentManager.beginTransaction().add(binding.navHostFragment.id, HomeFragment())
-            .commit()
+    private fun viewPager() {
+        val fragmentList =
+            listOf(HomeFragment(), AiFragment(), CommunityFragment(), ProfileFragment())
+        val viewPager = ViewPagerAdapter(this)
+        viewPager.item = fragmentList
+        binding.viewPager2.adapter = viewPager
 
-        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
+        binding.viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                binding.bottomNavigation.menu.getItem(position).isChecked = true
+            }
+        })
+    }
+
+    private fun navigation() {
+        binding.bottomNavigation.setOnItemSelectedListener {
+            when (it.itemId) {
+
                 R.id.navigation_home -> {
-//                    navController.navigate(R.id.navigation_home)
-                    replaceFragment(HomeFragment())
-                    true
+                    binding.viewPager2.currentItem = 0
+                    return@setOnItemSelectedListener true
                 }
-
                 R.id.navigation_ai -> {
-                    replaceFragment(AiFragment())
-                    true
+                    binding.viewPager2.currentItem = 1
+                    return@setOnItemSelectedListener true
                 }
-
                 R.id.navigation_community -> {
-                    replaceFragment(CommunityFragment())
-                    true
+                    binding.viewPager2.currentItem = 2
+                    return@setOnItemSelectedListener true
                 }
-
                 R.id.navigation_profile -> {
-                    replaceFragment(ProfileFragment())
-                    true
+                    binding.viewPager2.currentItem = 3
+                    return@setOnItemSelectedListener true
                 }
-
-                else -> false
+                else -> {
+                    binding.viewPager2.currentItem = 4
+                    return@setOnItemSelectedListener false
+                }
             }
         }
     }
-
-    private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().replace(binding.navHostFragment.id, fragment)
-            .commit()
-    }
-
 }

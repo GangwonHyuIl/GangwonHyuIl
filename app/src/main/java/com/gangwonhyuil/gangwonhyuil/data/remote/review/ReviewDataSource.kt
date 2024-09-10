@@ -1,4 +1,4 @@
 package com.gangwonhyuil.gangwonhyuil.data.remote.review
 
-class ReviewDataSource {
-}
+//data class ReviewDataSource {
+//}

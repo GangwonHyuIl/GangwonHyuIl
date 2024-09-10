@@ -18,7 +18,7 @@ interface TourDataSource {
         @Query("arrange") arrange: String? = "O",
         @Query("contentTypeId") contentTypeId: String? = "39", //숙박:32 , 음식점:39
         @Query("areaCode") areaCode: String? = "32", //강원도:32
-        @Query("sigunguCode") sigunguCode: String? = "1", //강릉:1, 동해:3, 속초:5, 춘천:13
+        @Query("sigunguCode") sigunguCode: String? = "1", //강릉:1, 동해:3, 속초:5, 영월:8, 원주:9, 춘천:13
         @Query("cat1") cat1: String? = "A05", //음식:A05
         @Query("cat2") cat2: String? = "A0502", //음식점:A0502
         @Query("cat3") cat3: String? = "A05020100", //한식:A05020100, 카페:A05020900

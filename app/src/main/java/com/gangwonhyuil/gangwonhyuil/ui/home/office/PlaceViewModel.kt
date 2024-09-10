@@ -41,6 +41,11 @@ constructor(
 
     internal fun updateSelectedLocation(location: String) {
         when (location) {
+            "춘천" -> {
+                _sigunguCode.value = "13"
+                _officeLocation.value = "eq.0"
+            }
+
             "강릉" -> {
                 _sigunguCode.value = "1"
                 _officeLocation.value = "eq.1"
@@ -51,14 +56,19 @@ constructor(
                 _officeLocation.value = "eq.2"
             }
 
-            "속초" -> {
-                _sigunguCode.value = "5"
+            "영월" -> {
+                _sigunguCode.value = "8"
                 _officeLocation.value = "eq.3"
             }
 
-            "춘천" -> {
-                _sigunguCode.value = "13"
-                _officeLocation.value = "eq.0"
+            "속초" -> {
+                _sigunguCode.value = "5"
+                _officeLocation.value = "eq.4"
+            }
+
+            "원주" -> {
+                _sigunguCode.value = "9"
+                _officeLocation.value = "eq.5"
             }
         }
     }

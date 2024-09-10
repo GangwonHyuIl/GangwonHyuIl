@@ -1,6 +1,9 @@
 package com.gangwonhyuil.gangwonhyuil.data.response.office
 
+import com.google.gson.annotations.SerializedName
+
 data class OfficeResponseItem(
     val offices: List<Office>,
-    val share_office_location: Int
+    @SerializedName("share_office_location")
+    val location: Int
 )

@@ -38,9 +38,10 @@ class OnBodingActivity : BaseActivity<ActivityOnBodingBinding>() {
     fun buttonClick() {
         binding.btnLogin.setOnClickListener {
             lifecycleScope.launch {
+                viewModel.fetchKakaoLogin(KakaoLoginDataSource().isLoginUserInfo())
                 KakaoLoginDataSource().login(context = this@OnBodingActivity)
-                KakaoLoginDataSource().isLoginUserInfo()
-                viewModel.fetchKakaoLogin()
+//                KakaoLoginDataSource().isLoginUserInfo()
+                viewModel.fetchKakaoSignup(KakaoLoginDataSource().isLoginUserInfo())
             }
         }
         binding.btnLogout.setOnClickListener {
@@ -57,8 +58,10 @@ class OnBodingActivity : BaseActivity<ActivityOnBodingBinding>() {
             finishAffinity()
             startActivity(Intent(this, MainActivity::class.java))
         }
+        binding.btnSignup.setOnClickListener {
+            lifecycleScope.launch {
+                viewModel.fetchKakaoSignup(KakaoLoginDataSource().isLoginUserInfo())
+            }
+        }
     }
-
-
-
 }

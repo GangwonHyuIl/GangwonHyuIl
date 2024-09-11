@@ -3,6 +3,7 @@ package com.gangwonhyuil.gangwonhyuil.ui.home.office
 import com.gangwonhyuil.gangwonhyuil.BuildConfig
 import com.gangwonhyuil.gangwonhyuil.data.remote.office.OfficeDataSource
 import com.gangwonhyuil.gangwonhyuil.data.remote.tour.TourDataSource
+import com.gangwonhyuil.gangwonhyuil.data.request.reviewIdRequest
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +27,6 @@ constructor(
     val sigunguCode: StateFlow<String> get() = _sigunguCode
     private val _officeLocation = MutableStateFlow<String>("eq.1")
     val officeLocation: StateFlow<String> get() = _officeLocation
-
     private val _itemList = MutableStateFlow<Map<String, List<PlaceItem>>>(emptyMap())
     val itemList: StateFlow<Map<String, List<PlaceItem>>> get() = _itemList
 
@@ -36,24 +36,6 @@ constructor(
             categories.forEach { category ->
                 fetchAllPlaceCategories(category)
             }
-            fetchOfficeRatingList()
-        }
-    }
-
-    suspend fun fetchOfficeRatingList() {
-        try {
-            val response =
-                officeClient.getOfficeRatingList(listOf("2745986", "2512985"))
-
-            if (response.isSuccessful) {
-                response.body()?.let { responseBody ->
-                    Timber.d("별점 response 성공: ${response.body()}")
-                }
-            } else {
-                Timber.d("별점 response 실패 %s", response.errorBody()?.string())
-            }
-        } catch (e: Exception) {
-            Timber.d("별점 response 에러 %s", e.message)
         }
     }
 
@@ -88,6 +70,29 @@ constructor(
                 _sigunguCode.value = "9"
                 _officeLocation.value = "eq.5"
             }
+        }
+    }
+
+    suspend fun fetchOfficeRatingList(contentId: String): String {
+        return try {
+            val response =
+                officeClient.getOfficeRatingList(reviewIdRequest(listOf(contentId.toInt())))
+
+            if (response.isSuccessful) {
+                response.body()?.let { responseBody ->
+                    Timber.d("별점 response 성공: ${responseBody.reviews}")
+
+                    val rating = responseBody.reviews.firstOrNull()?.rating ?: 0
+                    return rating.toString()
+                }
+                return "0"
+            } else {
+                Timber.d("별점 response 실패 %s", response.errorBody()?.string())
+                return "0"
+            }
+        } catch (e: Exception) {
+            Timber.d("별점 response 에러 %s", e.message)
+            return "0"
         }
     }
 
@@ -133,17 +138,20 @@ constructor(
                     response.body()?.let { responseBody ->
                         Timber.d("response 성공: ${response.body()}")
                         val items = responseBody.response.body.items.item ?: emptyList()
+
                         val placeItems = items.map { apiItem ->
+                            val rating = fetchOfficeRatingList(apiItem.contentid) ?: "0"
                             PlaceItem(
                                 id = apiItem.contentid.toLong(),
                                 name = apiItem.title,
                                 address = apiItem.addr1,
                                 image = apiItem.firstimage,
+                                rating = rating
                             )
                         }
                         _itemList.value =
                             _itemList.value.toMutableMap().apply { put(category, placeItems) }
-                        Timber.d("_itemList: ${_itemList.value}")
+
                         Timber.d("response 성공: ${items}")
                     }
                 } else {
@@ -172,6 +180,7 @@ constructor(
                                     name = office.name,
                                     address = office.address,
                                     image = office.imageUrl ?: "",
+                                    rating = office.rating.toString()
                                 )
                             }
                         }

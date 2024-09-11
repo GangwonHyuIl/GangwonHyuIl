@@ -6,10 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivityDetailBinding
-import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.EXTRA_POST_ID
 import com.gangwonhyuil.gangwonhyuil.ui.home.office.EXTRA_PLACE_ID
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PlaceDetailActivity : BaseActivity<ActivityDetailBinding>() {
     private lateinit var placeItemDetailAdapter: PlaceItemDetailAdapter
 

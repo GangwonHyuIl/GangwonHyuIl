@@ -29,6 +29,7 @@ jobs:
           WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
           TOUR_API_KEY: ${{ secrets.TOUR_API_KEY }}
           KAKAO_LOCAL_API_KEY: ${{secrets.KAKAO_LOCAL_API_KEY}}
+          GEMINI_API_KEY: ${{secrets.GEMINI_API_KEY}}
 
       - name: Build with Gradle
         run: ./gradlew build

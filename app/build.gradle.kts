@@ -14,8 +14,8 @@ android {
     lateinit var weatherApiKey: String
     lateinit var tourApiKey: String
     lateinit var kakoLocalApiKey: String
-    lateinit var supabaseApiKey: String
     lateinit var geminiApiKey: String
+    lateinit var supabaseApiKey: String
 
     if (System.getenv("CI") == "true") {
         weatherApiKey = System.getenv("WEATHER_API_KEY")
@@ -24,6 +24,8 @@ android {
             ?: throw GradleException("TOUR_API_KEY is not set in CI environment")
         kakoLocalApiKey = System.getenv("KAKAO_LOCAL_API_KEY")
             ?: throw GradleException("KAKAO_LOCAL_API_KEY is not set in CI environment")
+        geminiApiKey = System.getenv("GEMINI_API_KEY")
+            ?: throw GradleException("GEMINI_API_KEY is not set in CI environment")
         supabaseApiKey = System.getenv("SUPABASE_API_KEY")
             ?: throw GradleException("SUPABASE_API_KEY is not set in CI environment")
         geminiApiKey = System.getenv("GEMINI_API_KEY")
@@ -41,6 +43,8 @@ android {
                 ?: throw GradleException("TOUR_API_KEY is not set in local.properties")
             kakoLocalApiKey = properties.getProperty("KAKAO_LOCAL_API_KEY")
                 ?: throw GradleException("KAKAO_LOCAL_API_KEY is not set in local.properties")
+            geminiApiKey = properties.getProperty("GEMINI_API_KEY")
+                ?: throw GradleException("GEMINI_API_KEY is not set in local.properties")
             supabaseApiKey = properties.getProperty("SUPABASE_API_KEY")
                 ?: throw GradleException("SUPABASE_API_KEY is not set in local.properties")
             geminiApiKey = properties.getProperty("GEMINI_API_KEY")
@@ -59,6 +63,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField("String", "GEMINI_API_KEY", "$geminiApiKey")
         buildConfigField("String", "WEATHER_API_KEY", "$weatherApiKey")
         buildConfigField("String", "TOUR_API_KEY", "$tourApiKey")
         buildConfigField("String", "KAKAO_LOCAL_API_KEY", "$kakoLocalApiKey")

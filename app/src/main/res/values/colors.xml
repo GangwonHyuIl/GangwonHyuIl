@@ -7,5 +7,9 @@
     <color name="rain_info">#407CC5</color>
     <color name="left_balloon">#AAF4BA</color>
     <color name="right_balloon">#8EB9EF</color>
+    <color name="light_gray">#E0E0E0</color>
+    <color name="yellow">#F4BF1F</color>
+    <color name="light_yellow">#EFE5CA</color>
+    <color name="light_black">#2C2C2C</color>
 
 </resources>

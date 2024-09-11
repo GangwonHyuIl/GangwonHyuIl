@@ -4,6 +4,8 @@ import com.gangwonhyuil.gangwonhyuil.BuildConfig
 import com.gangwonhyuil.gangwonhyuil.data.interceptor.SupabaseInterceptor
 import com.gangwonhyuil.gangwonhyuil.data.remote.kakaoLocal.KakaoLocalDataSource
 import com.gangwonhyuil.gangwonhyuil.data.remote.kakaoLocal.KakaoLocalInterceptor
+import com.gangwonhyuil.gangwonhyuil.data.remote.kakaoLogin.KakaoLoginDTO
+import com.gangwonhyuil.gangwonhyuil.data.remote.kakaoLogin.KakaoLoginInterface
 import com.gangwonhyuil.gangwonhyuil.data.remote.office.OfficeDataSource
 import com.gangwonhyuil.gangwonhyuil.data.remote.tour.TourDataSource
 import com.gangwonhyuil.gangwonhyuil.data.remote.weather.WeatherDataSource
@@ -55,6 +57,15 @@ object RemoteModule {
             customInterceptor = supabaseInterceptor
         ).create(
             OfficeDataSource::class.java
+        )
+    @Singleton
+    @Provides
+    fun provideKakaoLoginDataSource(supabaseInterceptor: SupabaseInterceptor): KakaoLoginInterface =
+        createRetrofit(
+            SUPABASE_BASE_URL,
+            customInterceptor = supabaseInterceptor
+        ).create(
+            KakaoLoginInterface::class.java
         )
 
     private fun createRetrofit(

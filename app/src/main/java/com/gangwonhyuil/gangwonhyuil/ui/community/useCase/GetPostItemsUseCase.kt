@@ -23,16 +23,16 @@ class GetPostItemsUseCase
                             id = it.postIdx.toLong(),
                             writerInfo =
                                 WriterInfo(
-                                    id = it.userIdx.toLong(),
-                                    name = it.userNickname ?: "",
-                                    profileImage = it.userProfileImage
+                                    id = it.writerIdx.toLong(),
+                                    name = it.writerName ?: "",
+                                    profileImage = it.writerProfileImage
                                 ),
                             timeStamp =
                                 LocalDateTime.parse(it.postCreatedAt.substring(0, 20)).format(
                                     DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
                                 ),
                             content = it.postTitle,
-                            placeListCount = it.categoryCount,
+                            placeListCount = it.placeListCount,
                             placeCount = it.placeCount
                         )
                     }

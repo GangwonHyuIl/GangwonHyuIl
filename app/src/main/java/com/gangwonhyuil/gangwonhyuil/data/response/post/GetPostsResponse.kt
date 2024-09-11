@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class GetPostsResponse(
     @SerializedName("category_count")
-    val categoryCount: Int,
+    val placeListCount: Int,
     @SerializedName("place_count")
     val placeCount: Int,
     @SerializedName("post_created_at")
@@ -14,9 +14,9 @@ data class GetPostsResponse(
     @SerializedName("post_title")
     val postTitle: String,
     @SerializedName("user_idx")
-    val userIdx: Int,
+    val writerIdx: Int,
     @SerializedName("user_nickname")
-    val userNickname: String?, // TODO: change property to not-null
+    val writerName: String?, // TODO: change property to not-null
     @SerializedName("user_profile_image")
-    val userProfileImage: String?,
+    val writerProfileImage: String?,
 )

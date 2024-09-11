@@ -35,7 +35,7 @@ class PlaceAdapter(
                 crossfade(true)
             }
             officeNameTextView.text = placeItem.name
-//                officeRatingTextView.text = item.rating
+            officeRatingTextView.text = placeItem.rating
 
             setOnClickListener(placeItem)
         }

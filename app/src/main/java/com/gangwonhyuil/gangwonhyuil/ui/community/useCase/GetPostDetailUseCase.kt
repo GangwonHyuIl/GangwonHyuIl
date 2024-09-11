@@ -17,7 +17,7 @@ class GetPostDetailUseCase
                     WriterInfo(
                         id = 1L,
                         name = "작성자1",
-                        profileImage = URL("http://")
+                        profileImage = ""
                     ),
                 timeStamp = "0000/00/00 00:00:00",
                 content = "춘천에 7박 8일로 다녀온 워케이션 정보 공유합니다~",

@@ -4,9 +4,9 @@ import com.gangwonhyuil.gangwonhyuil.BuildConfig
 import com.gangwonhyuil.gangwonhyuil.data.interceptor.SupabaseInterceptor
 import com.gangwonhyuil.gangwonhyuil.data.remote.kakaoLocal.KakaoLocalDataSource
 import com.gangwonhyuil.gangwonhyuil.data.remote.kakaoLocal.KakaoLocalInterceptor
-import com.gangwonhyuil.gangwonhyuil.data.remote.kakaoLogin.KakaoLoginDTO
 import com.gangwonhyuil.gangwonhyuil.data.remote.kakaoLogin.KakaoLoginInterface
 import com.gangwonhyuil.gangwonhyuil.data.remote.office.OfficeDataSource
+import com.gangwonhyuil.gangwonhyuil.data.remote.post.PostDataSource
 import com.gangwonhyuil.gangwonhyuil.data.remote.tour.TourDataSource
 import com.gangwonhyuil.gangwonhyuil.data.remote.weather.WeatherDataSource
 import dagger.Module
@@ -31,23 +31,21 @@ private const val SUPABASE_BASE_URL = "https://ryrfpjqosicjmacrglzs.supabase.co/
 object RemoteModule {
     @Singleton
     @Provides
-    fun provideWeatherDataSource(): WeatherDataSource =
-        createRetrofit(WEATHER_BASE_URL).create(WeatherDataSource::class.java)
-
-    @Singleton
-    @Provides
-    fun provideTourDataSource(): TourDataSource =
-        createRetrofit(TOUR_BASE_URL).create(TourDataSource::class.java)
-
-    @Singleton
-    @Provides
-    fun provideKakaoLocalDataSource(kakaoLocalInterceptor: KakaoLocalInterceptor): KakaoLocalDataSource =
+    fun provideKakaoLoginDataSource(supabaseInterceptor: SupabaseInterceptor): KakaoLoginInterface =
         createRetrofit(
-            baseUrl = KAKAO_LOCAL_BASE_URL,
-            customInterceptor = kakaoLocalInterceptor
+            SUPABASE_BASE_URL,
+            customInterceptor = supabaseInterceptor
         ).create(
-            KakaoLocalDataSource::class.java
+            KakaoLoginInterface::class.java
         )
+
+    @Singleton
+    @Provides
+    fun provideWeatherDataSource(): WeatherDataSource = createRetrofit(WEATHER_BASE_URL).create(WeatherDataSource::class.java)
+
+    @Singleton
+    @Provides
+    fun provideTourDataSource(): TourDataSource = createRetrofit(TOUR_BASE_URL).create(TourDataSource::class.java)
 
     @Singleton
     @Provides
@@ -58,14 +56,25 @@ object RemoteModule {
         ).create(
             OfficeDataSource::class.java
         )
+
     @Singleton
     @Provides
-    fun provideKakaoLoginDataSource(supabaseInterceptor: SupabaseInterceptor): KakaoLoginInterface =
+    fun providePostDataSource(supabaseInterceptor: SupabaseInterceptor): PostDataSource =
         createRetrofit(
             SUPABASE_BASE_URL,
             customInterceptor = supabaseInterceptor
         ).create(
-            KakaoLoginInterface::class.java
+            PostDataSource::class.java
+        )
+
+    @Singleton
+    @Provides
+    fun provideKakaoLocalDataSource(kakaoLocalInterceptor: KakaoLocalInterceptor): KakaoLocalDataSource =
+        createRetrofit(
+            baseUrl = KAKAO_LOCAL_BASE_URL,
+            customInterceptor = kakaoLocalInterceptor
+        ).create(
+            KakaoLocalDataSource::class.java
         )
 
     private fun createRetrofit(

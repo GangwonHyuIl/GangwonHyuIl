@@ -10,7 +10,7 @@ sealed interface PostDetailItem : Eigenvalue {
     data class PostContent(
         val id: Long,
         val writerName: String,
-        val writerProfileImage: URL,
+        val writerProfileImage: String?,
         val timeStamp: String,
         val content: String,
     ) : PostDetailItem {
@@ -46,7 +46,7 @@ sealed interface PostDetailItem : Eigenvalue {
         val id: Long,
         val writerId: Long,
         val writerName: String,
-        val writerProfileImage: URL,
+        val writerProfileImage: String?,
         val timeStamp: String,
         val content: String,
     ) : PostDetailItem {

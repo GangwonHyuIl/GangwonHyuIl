@@ -8,4 +8,11 @@ enum class PlaceCategory(
     RESTAURANT("식당", 1),
     CAFE("카페", 2),
     ACCOMODATION("숙박", 3),
+    ;
+
+    companion object {
+        fun fromCode(code: Int): PlaceCategory =
+            entries.find { it.code == code }
+                ?: throw IllegalArgumentException("Invalid code")
+    }
 }

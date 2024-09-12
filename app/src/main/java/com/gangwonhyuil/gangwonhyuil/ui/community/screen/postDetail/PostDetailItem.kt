@@ -1,10 +1,8 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail
 
 import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PlaceCategory
-import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostComment
 import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostDetail
 import com.gangwonhyuil.gangwonhyuil.util.base.Eigenvalue
-import java.net.URL
 
 sealed interface PostDetailItem : Eigenvalue {
     data class PostContent(
@@ -27,14 +25,15 @@ sealed interface PostDetailItem : Eigenvalue {
     }
 
     data class PlaceItem(
+        val id: Long,
         val category: PlaceCategory,
         val name: String,
         val address: String,
-        val images: List<URL> = emptyList(),
+        val images: List<String> = emptyList(),
         val content: String = "",
     ) : PostDetailItem {
         override val viewType: Int get() = PostDetailViewType.PLACE_ITEM.type
-        override val eigenvalue get() = address
+        override val eigenvalue get() = id
     }
 
     data object CommentHeader : PostDetailItem {
@@ -63,6 +62,7 @@ sealed interface PostDetailItem : Eigenvalue {
                         for (place in placeList.places) {
                             add(
                                 PlaceItem(
+                                    place.id,
                                     place.category,
                                     place.name,
                                     place.address,
@@ -76,7 +76,7 @@ sealed interface PostDetailItem : Eigenvalue {
             return postDetailItems
         }
 
-        fun toCommentItems(comments: List<PostComment>): List<CommentItem> =
+        fun toCommentItems(comments: List<PostDetail.PostComment>): List<CommentItem> =
             comments.map {
                 CommentItem(
                     id = it.id,

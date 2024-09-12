@@ -1,11 +1,9 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail
 
 import androidx.lifecycle.SavedStateHandle
-import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostComment
 import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostDetail
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailItem.Companion.toCommentItems
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailItem.Companion.toPlaceItems
-import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetPostCommentsUseCase
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetPostDetailUseCase
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetUserIdUseCase
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
@@ -28,13 +26,11 @@ class PostDetailViewModel
         savedStateHandle: SavedStateHandle,
         private val getUserId: GetUserIdUseCase,
         private val getPostDetailDetail: GetPostDetailUseCase,
-        private val getPostComments: GetPostCommentsUseCase,
     ) : BaseViewModel() {
         private val _postId = MutableStateFlow<Long?>(null)
         private val _userId = MutableStateFlow<Long?>(null)
 
         private val _postDetail = MutableStateFlow<PostDetail?>(null)
-        private val _postComments = MutableStateFlow<List<PostComment>>(emptyList())
         private val _postDetailItems = MutableStateFlow<List<PostDetailItem>>(emptyList())
         val postDetailItems = _postDetailItems.asStateFlow()
         val postContent: PostDetailItem.PostContent?
@@ -69,29 +65,28 @@ class PostDetailViewModel
                 _postId.collect { postId ->
                     if (postId != null) {
                         _postDetail.update { getPostDetailDetail(postId) }
-                        _postComments.update { getPostComments(postId) }
                     }
                 }
             }
             viewModelScopeEH.launch {
-                combine(_postDetail, _postComments) { postDetail, postComments ->
-                    postDetail?.let {
-                        mutableListOf<PostDetailItem>().apply {
-                            add(
-                                PostDetailItem.PostContent(
-                                    id = it.id,
-                                    writerProfileImage = it.writerInfo.profileImage,
-                                    writerName = it.writerInfo.name,
-                                    timeStamp = it.timeStamp,
-                                    content = it.content
+                _postDetail.collect { postDetail ->
+                    val postDetailItems =
+                        postDetail?.let {
+                            mutableListOf<PostDetailItem>().apply {
+                                add(
+                                    PostDetailItem.PostContent(
+                                        id = it.id,
+                                        writerProfileImage = it.writerInfo.profileImage,
+                                        writerName = it.writerInfo.name,
+                                        timeStamp = it.timeStamp,
+                                        content = it.content
+                                    )
                                 )
-                            )
-                            addAll(toPlaceItems(it.placeList))
-                            add(PostDetailItem.CommentHeader)
-                            addAll(toCommentItems(postComments))
-                        }
-                    } ?: emptyList()
-                }.collect { postDetailItems ->
+                                addAll(toPlaceItems(it.placeList))
+                                add(PostDetailItem.CommentHeader)
+                                addAll(toCommentItems(it.comments))
+                            }
+                        } ?: emptyList()
                     _postDetailItems.update { postDetailItems }
                 }
             }

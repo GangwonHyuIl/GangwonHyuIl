@@ -37,6 +37,11 @@ class PostDetailViewModel
         private val _postComments = MutableStateFlow<List<PostComment>>(emptyList())
         private val _postDetailItems = MutableStateFlow<List<PostDetailItem>>(emptyList())
         val postDetailItems = _postDetailItems.asStateFlow()
+        val postContent: PostDetailItem.PostContent?
+            get() =
+                postDetailItems.value.find {
+                    it is PostDetailItem.PostContent
+                } as? PostDetailItem.PostContent
 
         private val _isMyPost = MutableStateFlow(false)
         val isMyPost = _isMyPost.asStateFlow()
@@ -98,5 +103,13 @@ class PostDetailViewModel
                     _isMyPost.update { isMyPost }
                 }
             }
+        }
+
+        fun reportPost(
+            postId: Long,
+            reason: String,
+        ) {
+            // TODO: repost post
+            Timber.d("reportPost: $postId, reason: $reason")
         }
     }

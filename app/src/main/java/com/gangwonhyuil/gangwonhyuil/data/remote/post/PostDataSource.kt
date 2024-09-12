@@ -1,7 +1,9 @@
 package com.gangwonhyuil.gangwonhyuil.data.remote.post
 
 import com.gangwonhyuil.gangwonhyuil.data.request.post.AddCommentRequest
+import com.gangwonhyuil.gangwonhyuil.data.request.post.DeletePostRequest
 import com.gangwonhyuil.gangwonhyuil.data.response.post.AddCommentResponse
+import com.gangwonhyuil.gangwonhyuil.data.response.post.DeletePostResponse
 import com.gangwonhyuil.gangwonhyuil.data.response.post.GetPostDetailResponse
 import com.gangwonhyuil.gangwonhyuil.data.response.post.GetPostsResponse
 import retrofit2.http.Body
@@ -22,4 +24,9 @@ interface PostDataSource {
     suspend fun addComment(
         @Body addCommentRequest: AddCommentRequest,
     ): AddCommentResponse
+
+    @POST("rpc/delete_post")
+    suspend fun deletePost(
+        @Body deletePostRequest: DeletePostRequest,
+    ): DeletePostResponse
 }

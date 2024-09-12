@@ -5,6 +5,7 @@ import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostDetail
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailItem.Companion.toCommentItems
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailItem.Companion.toPlaceItems
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.AddCommentUseCase
+import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.DeletePostUseCase
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetPostDetailUseCase
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetUserIdUseCase
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
@@ -28,6 +29,7 @@ class PostDetailViewModel
         private val getUserId: GetUserIdUseCase,
         private val getPostDetailDetail: GetPostDetailUseCase,
         private val addComment: AddCommentUseCase,
+        private val deletePost: DeletePostUseCase,
     ) : BaseViewModel() {
         private val _postId = MutableStateFlow<Long?>(null)
         private val _userId = MutableStateFlow<Long?>(null)
@@ -137,6 +139,20 @@ class PostDetailViewModel
             // TODO: repost post
             Timber.d("reportPost: $postId, reason: $reason")
         }
+
+        fun deletePost() {
+            viewModelScopeEH.launch {
+                if (_postId.value == null) {
+                    _postDetailState.update { PostDetailState.DeletePostFail }
+                    return@launch
+                }
+                if (deletePost(_postId.value!!)) {
+                    _postDetailState.update { PostDetailState.DeletePostSuccess }
+                } else {
+                    _postDetailState.update { PostDetailState.DeletePostFail }
+                }
+            }
+        }
     }
 
 sealed interface PostDetailState {
@@ -145,4 +161,8 @@ sealed interface PostDetailState {
     data object AddCommentSuccess : PostDetailState
 
     data object AddCommentFail : PostDetailState
+
+    data object DeletePostSuccess : PostDetailState
+
+    data object DeletePostFail : PostDetailState
 }

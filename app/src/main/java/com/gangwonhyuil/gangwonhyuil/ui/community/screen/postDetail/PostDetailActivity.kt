@@ -70,8 +70,7 @@ class PostDetailActivity :
                     }
 
                     R.id.post_detail_delete_post -> {
-                        // TODO: delete post
-                        Timber.d("delete post menu clicked")
+                        viewModel.deletePost()
                         true
                     }
 
@@ -167,6 +166,25 @@ class PostDetailActivity :
                                 .makeText(
                                     this@PostDetailActivity,
                                     "댓글 등록에 실패했습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                        }
+
+                        PostDetailState.DeletePostSuccess -> {
+                            Toast
+                                .makeText(
+                                    this@PostDetailActivity,
+                                    "게시글이 삭제되었습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            finish()
+                        }
+
+                        PostDetailState.DeletePostFail -> {
+                            Toast
+                                .makeText(
+                                    this@PostDetailActivity,
+                                    "게시글 삭제에 실패했습니다.",
                                     Toast.LENGTH_SHORT
                                 ).show()
                         }

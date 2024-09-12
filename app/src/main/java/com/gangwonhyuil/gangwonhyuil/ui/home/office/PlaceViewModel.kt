@@ -3,7 +3,7 @@ package com.gangwonhyuil.gangwonhyuil.ui.home.office
 import com.gangwonhyuil.gangwonhyuil.BuildConfig
 import com.gangwonhyuil.gangwonhyuil.data.remote.office.OfficeDataSource
 import com.gangwonhyuil.gangwonhyuil.data.remote.tour.TourDataSource
-import com.gangwonhyuil.gangwonhyuil.data.request.reviewIdRequest
+import com.gangwonhyuil.gangwonhyuil.data.request.ReviewIdRequest
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -76,7 +76,7 @@ constructor(
     suspend fun fetchOfficeRatingList(contentId: String): String {
         return try {
             val response =
-                officeClient.getOfficeRatingList(reviewIdRequest(listOf(contentId.toInt())))
+                officeClient.getOfficeRatingList(ReviewIdRequest(listOf(contentId.toInt())))
 
             if (response.isSuccessful) {
                 response.body()?.let { responseBody ->

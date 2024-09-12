@@ -30,7 +30,6 @@ android {
             ?: throw GradleException("SUPABASE_API_KEY is not set in CI environment")
         geminiApiKey = System.getenv("GEMINI_API_KEY")
             ?: throw GradleException("GEMINI_API_KEY is not set in CI environment")
-
     } else {
         val properties = Properties()
         val localPropertiesFile = project.rootProject.file("local.properties")
@@ -113,6 +112,7 @@ dependencies {
     ksp(libs.hilt.android.compiler)
 
     implementation(libs.coil)
+    implementation(libs.compressor)
 
     implementation(libs.gson)
     implementation(libs.retrofit)

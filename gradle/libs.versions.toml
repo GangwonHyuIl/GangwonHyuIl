@@ -4,6 +4,7 @@ generativeai = "0.9.0"
 gson = "2.10.1"
 hiltAndroid = "2.52"
 coil = "2.7.0"
+compressor = "3.0.1"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -32,6 +33,7 @@ gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
+compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

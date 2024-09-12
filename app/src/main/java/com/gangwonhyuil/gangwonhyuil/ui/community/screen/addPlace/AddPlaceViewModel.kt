@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PlaceCategory
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.addPost.AddPostItem
+import com.gangwonhyuil.gangwonhyuil.util.FileUtil
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +21,7 @@ class AddPlaceViewModel
     @Inject
     constructor(
         savedStateHandle: SavedStateHandle,
+        private val fileUtil: FileUtil,
     ) : BaseViewModel() {
         private val _placeListId = MutableStateFlow("")
 
@@ -89,9 +91,17 @@ class AddPlaceViewModel
 
         fun onImageUrisInput(imageUris: List<Uri>) {
             Timber.d("imageUris: $imageUris")
-            // TODO: convert uri to file
-            // TODO: upload file to server & get url
-            // TODO: update _placeImages
+
+            viewModelScopeEH.launch {
+                imageUris.forEach { uri ->
+                    viewModelScopeEH.launch {
+                        // convert uri to file
+                        val imageFile = fileUtil.uriToFile(uri)
+                        // TODO: upload file to server & get url
+                        // TODO: update _placeImages
+                    }
+                }
+            }
         }
 
         fun deleteImage(imageUrl: String) {

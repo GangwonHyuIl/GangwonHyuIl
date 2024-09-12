@@ -7,7 +7,7 @@ data class PlaceItem(
     val name: String,
     val address: String,
     val image: String,
-//        val rating: String,
+    val rating: String,
 ) : Eigenvalue {
     override val viewType: Int get() = 0
     override val eigenvalue

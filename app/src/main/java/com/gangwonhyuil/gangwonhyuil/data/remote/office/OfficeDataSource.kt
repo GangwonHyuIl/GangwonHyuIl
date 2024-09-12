@@ -1,8 +1,9 @@
 package com.gangwonhyuil.gangwonhyuil.data.remote.office
 
 import com.gangwonhyuil.gangwonhyuil.data.interceptor.PostJsonRequest
+import com.gangwonhyuil.gangwonhyuil.data.request.ReviewIdRequest
 import com.gangwonhyuil.gangwonhyuil.data.response.office.OfficeResponse
-import com.gangwonhyuil.gangwonhyuil.data.response.officeRating.officeRatingResponse
+import com.gangwonhyuil.gangwonhyuil.data.response.officeRating.OfficeReviews
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,6 +19,6 @@ interface OfficeDataSource {
     @PostJsonRequest
     @POST("rpc/get_area_reviews")
     suspend fun getOfficeRatingList(
-        @Body idList: List<String>
-    ): Response<officeRatingResponse>
+        @Body idList: ReviewIdRequest
+    ): Response<OfficeReviews>
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostDetail
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailItem.Companion.toCommentItems
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailItem.Companion.toPlaceItems
+import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.AddCommentUseCase
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetPostDetailUseCase
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetUserIdUseCase
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
@@ -26,9 +27,11 @@ class PostDetailViewModel
         savedStateHandle: SavedStateHandle,
         private val getUserId: GetUserIdUseCase,
         private val getPostDetailDetail: GetPostDetailUseCase,
+        private val addComment: AddCommentUseCase,
     ) : BaseViewModel() {
         private val _postId = MutableStateFlow<Long?>(null)
         private val _userId = MutableStateFlow<Long?>(null)
+        val userId = _userId.asStateFlow()
 
         private val _postDetail = MutableStateFlow<PostDetail?>(null)
         private val _postDetailItems = MutableStateFlow<List<PostDetailItem>>(emptyList())
@@ -98,6 +101,27 @@ class PostDetailViewModel
                     _isMyPost.update { isMyPost }
                 }
             }
+        }
+
+        fun onAddComment(comment: String): Boolean {
+            var isSuccessful = false
+            viewModelScopeEH.launch {
+                isSuccessful =
+                    addComment(
+                        postId = _postId.value ?: return@launch,
+                        userId = _userId.value ?: return@launch,
+                        content = comment
+                    )
+            }
+            return isSuccessful
+        }
+
+        fun reportComment(
+            commentId: Long,
+            reason: String,
+        ) {
+            // TODO: repost comment
+            Timber.d("reportComment: $commentId, reason: $reason")
         }
 
         fun reportPost(

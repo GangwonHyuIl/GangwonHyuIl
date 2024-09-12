@@ -2,6 +2,7 @@ package com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail
 
 import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PlaceCategory
 import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostDetail
+import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.reportDialog.ReportableItem
 import com.gangwonhyuil.gangwonhyuil.util.base.Eigenvalue
 
 sealed interface PostDetailItem : Eigenvalue {
@@ -11,7 +12,8 @@ sealed interface PostDetailItem : Eigenvalue {
         val writerProfileImage: String?,
         val timeStamp: String,
         val content: String,
-    ) : PostDetailItem {
+    ) : PostDetailItem,
+        ReportableItem {
         override val viewType: Int = PostDetailViewType.POST_CONTENT.type
         override val eigenvalue: Any = id
     }
@@ -48,7 +50,8 @@ sealed interface PostDetailItem : Eigenvalue {
         val writerProfileImage: String?,
         val timeStamp: String,
         val content: String,
-    ) : PostDetailItem {
+    ) : PostDetailItem,
+        ReportableItem {
         override val viewType: Int = PostDetailViewType.COMMENT_ITEM.type
         override val eigenvalue: Any = id
     }

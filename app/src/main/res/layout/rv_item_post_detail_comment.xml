@@ -34,20 +34,20 @@
             android:maxLines="1"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_comment_time"
+            app:layout_constraintEnd_toStartOf="@id/tv_comment_action"
             app:layout_constraintStart_toEndOf="@id/iv_comment_writer_image"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="작성자" />
 
         <TextView
-            android:id="@+id/tv_comment_time"
+            android:id="@+id/tv_comment_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="신고"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="2024/08/27 00:00:00" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -56,4 +56,15 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         tools:text="좋은 정보 감사합니다! 워케이션 준비에 도움이 많이 되었어요~" />
+
+    <TextView
+        android:id="@+id/tv_comment_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2024/08/27 00:00:00" />
 </LinearLayout>

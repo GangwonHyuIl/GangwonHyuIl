@@ -4,28 +4,37 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivityPostDetailBinding
-import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.reportPost.ReportPostDialog
+import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.reportDialog.ReportDialog
+import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.reportDialog.ReportableItem
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-interface OnReportPostDialogClickListener {
+interface OnReportDialogClickListener {
     fun onReportClick(
-        postId: Long,
+        reportableItem: ReportableItem,
         reason: String,
     )
+}
+
+interface OnPlaceDetailItemAdapterClickListener {
+    fun onCommentReportClick(comment: PostDetailItem.CommentItem)
+
+    fun onCommentDeleteClick(comment: PostDetailItem.CommentItem)
 }
 
 @AndroidEntryPoint
 class PostDetailActivity :
     BaseActivity<ActivityPostDetailBinding>(),
-    OnReportPostDialogClickListener {
+    OnReportDialogClickListener,
+    OnPlaceDetailItemAdapterClickListener {
     private val viewModel by viewModels<PostDetailViewModel>()
 
     private lateinit var postDetailItemAdapter: PostDetailItemAdapter
@@ -42,6 +51,7 @@ class PostDetailActivity :
     private fun initView() {
         initTopAppBar()
         initPostDetailRecyclerView()
+        initAddCommentLayout()
     }
 
     private fun initTopAppBar() {
@@ -53,7 +63,9 @@ class PostDetailActivity :
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.post_detail_report -> {
-                        startReportPostDialog()
+                        viewModel.postContent?.let { postContent ->
+                            showReportDialog(postContent)
+                        }
                         true
                     }
 
@@ -69,21 +81,45 @@ class PostDetailActivity :
         }
     }
 
-    private fun startReportPostDialog() {
-        viewModel.postContent?.let { postContent ->
-            val reportPostDialog =
-                ReportPostDialog(
-                    context = this,
-                    postContent = postContent,
-                    onClickListener = this
-                )
-            reportPostDialog.show()
-        }
+    private fun showReportDialog(reportableItem: ReportableItem) {
+        val reportDialog =
+            ReportDialog(
+                context = this,
+                reportableItem = reportableItem,
+                onClickListener = this
+            )
+        reportDialog.show()
     }
 
     private fun initPostDetailRecyclerView() {
-        postDetailItemAdapter = PostDetailItemAdapter()
+        postDetailItemAdapter = PostDetailItemAdapter(this@PostDetailActivity)
         binding.rvPostDetail.adapter = postDetailItemAdapter
+    }
+
+    private fun initAddCommentLayout() {
+        binding.bntAddComment.setOnClickListener {
+            val comment = binding.etAddComment.text.toString()
+            if (comment.isEmpty()) {
+                Toast.makeText(this, "댓글을 입력해 주세요", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (viewModel.onAddComment(comment)) {
+                binding.etAddComment.text.clear()
+            } else {
+                Toast.makeText(this, "댓글을 등록하지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+            val inputMethodManager =
+                this@PostDetailActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            with(binding.etAddComment) {
+                clearFocus()
+                inputMethodManager.hideSoftInputFromWindow(
+                    windowToken,
+                    0
+                )
+            }
+        }
     }
 
     private fun initObserveViewModel() {
@@ -108,15 +144,32 @@ class PostDetailActivity :
                     postDetailItemAdapter.submitList(postDetailItems)
                 }
             }
+            lifecycleScope.launch {
+                userId.collect { userId ->
+                    postDetailItemAdapter.userId = userId
+                }
+            }
         }
     }
 
     override fun onReportClick(
-        postId: Long,
+        reportableItem: ReportableItem,
         reason: String,
     ) {
-        viewModel.reportPost(postId, reason)
+        when (reportableItem) {
+            is PostDetailItem.PostContent -> viewModel.reportPost(reportableItem.id, reason)
+            is PostDetailItem.CommentItem -> viewModel.reportComment(reportableItem.id, reason)
+        }
         Toast.makeText(this, "신고가 접수되었습니다.", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onCommentReportClick(comment: PostDetailItem.CommentItem) {
+        showReportDialog(comment)
+    }
+
+    override fun onCommentDeleteClick(comment: PostDetailItem.CommentItem) {
+        // TODO: delete comment
+        Timber.d("delete comment, comment: $comment")
     }
 
     companion object {

@@ -16,7 +16,7 @@ data class GetPostsResponse(
     @SerializedName("user_idx")
     val writerIdx: Int,
     @SerializedName("user_nickname")
-    val writerName: String?, // TODO: change property to not-null
+    val writerName: String,
     @SerializedName("user_profile_image")
     val writerProfileImage: String?,
 )

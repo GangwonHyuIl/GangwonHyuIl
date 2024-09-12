@@ -24,7 +24,7 @@ class GetPostItemsUseCase
                             writerInfo =
                                 WriterInfo(
                                     id = it.writerIdx.toLong(),
-                                    name = it.writerName ?: "",
+                                    name = it.writerName,
                                     profileImage = it.writerProfileImage
                                 ),
                             timeStamp =

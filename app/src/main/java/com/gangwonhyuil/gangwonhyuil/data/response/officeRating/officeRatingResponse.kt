@@ -8,5 +8,5 @@ data class officeRatingResponse (
     @SerializedName("total_reviews")
     val numOfReviews: Int,
     @SerializedName("average_rating")
-    val rating: Int
+    val rating: Float
 )

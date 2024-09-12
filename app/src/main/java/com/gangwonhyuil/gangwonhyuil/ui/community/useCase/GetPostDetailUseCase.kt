@@ -18,6 +18,7 @@ class GetPostDetailUseCase
             when (val customResponse = getPostDetail(postId)) {
                 is CustomResponse.Success<*> -> {
                     with(customResponse.data as GetPostDetailResponse) {
+                        Timber.d(this.toString())
                         PostDetail(
                             id = postIdx.toLong(),
                             writerInfo =
@@ -34,10 +35,10 @@ class GetPostDetailUseCase
                                         id = it.placeListIdx.toLong(),
                                         placeListName = it.placeListName,
                                         places =
-                                            it.places.map { place ->
+                                            it.places?.map { place ->
                                                 PostDetail.PlaceList.Place(
                                                     id = place.placeIdx.toLong(),
-                                                    category = PlaceCategory.fromCode(place.placeCategoryCode),
+                                                    category = PlaceCategory.SHARED_OFFICE, // TODO: get from response
                                                     name = place.placeTitle,
                                                     address = place.placeAddress,
                                                     images =
@@ -45,7 +46,7 @@ class GetPostDetailUseCase
                                                             ?: emptyList(),
                                                     content = place.placeContent ?: ""
                                                 )
-                                            }
+                                            } ?: emptyList()
                                     )
                                 } ?: emptyList(),
                             comments =

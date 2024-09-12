@@ -1,8 +1,12 @@
 package com.gangwonhyuil.gangwonhyuil.data.remote.post
 
+import com.gangwonhyuil.gangwonhyuil.data.request.post.AddCommentRequest
+import com.gangwonhyuil.gangwonhyuil.data.response.post.AddCommentResponse
 import com.gangwonhyuil.gangwonhyuil.data.response.post.GetPostDetailResponse
 import com.gangwonhyuil.gangwonhyuil.data.response.post.GetPostsResponse
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface PostDataSource {
@@ -13,4 +17,9 @@ interface PostDataSource {
     suspend fun getPostDetail(
         @Query("post_idx") postIdx: String,
     ): List<GetPostDetailResponse>
+
+    @POST("rpc/create_comment")
+    suspend fun addComment(
+        @Body addCommentRequest: AddCommentRequest,
+    ): AddCommentResponse
 }

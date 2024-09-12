@@ -15,7 +15,7 @@ class GetPostDetailUseCase
                 id = 0L,
                 writerInfo =
                     WriterInfo(
-                        id = 0L,
+                        id = 1L,
                         name = "작성자1",
                         profileImage = URL("http://")
                     ),

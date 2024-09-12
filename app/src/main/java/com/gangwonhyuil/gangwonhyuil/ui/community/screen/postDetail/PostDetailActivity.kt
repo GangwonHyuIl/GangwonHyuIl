@@ -4,17 +4,28 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivityPostDetailBinding
+import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.reportPost.ReportPostDialog
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+interface OnReportPostDialogClickListener {
+    fun onReportClick(
+        postId: Long,
+        reason: String,
+    )
+}
+
 @AndroidEntryPoint
-class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
+class PostDetailActivity :
+    BaseActivity<ActivityPostDetailBinding>(),
+    OnReportPostDialogClickListener {
     private val viewModel by viewModels<PostDetailViewModel>()
 
     private lateinit var postDetailItemAdapter: PostDetailItemAdapter
@@ -42,14 +53,7 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.post_detail_report -> {
-                        // TODO: report post
-                        Timber.d("report post menu clicked")
-                        true
-                    }
-
-                    R.id.post_detail_edit_post -> {
-                        // TODO: edit post
-                        Timber.d("edit post menu clicked")
+                        startReportPostDialog()
                         true
                     }
 
@@ -62,6 +66,18 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
                     else -> false
                 }
             }
+        }
+    }
+
+    private fun startReportPostDialog() {
+        viewModel.postContent?.let { postContent ->
+            val reportPostDialog =
+                ReportPostDialog(
+                    context = this,
+                    postContent = postContent,
+                    onClickListener = this
+                )
+            reportPostDialog.show()
         }
     }
 
@@ -93,6 +109,14 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
                 }
             }
         }
+    }
+
+    override fun onReportClick(
+        postId: Long,
+        reason: String,
+    ) {
+        viewModel.reportPost(postId, reason)
+        Toast.makeText(this, "신고가 접수되었습니다.", Toast.LENGTH_SHORT).show()
     }
 
     companion object {

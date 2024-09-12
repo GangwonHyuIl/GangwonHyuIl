@@ -28,10 +28,12 @@ class AddPlaceViewModel
         val placeName = _placeName.asStateFlow()
         private val _placeAddress = MutableStateFlow("")
         val placeAddress = _placeAddress.asStateFlow()
-        private val _placeImages = MutableStateFlow<List<Uri>>(emptyList())
-        val placeImages = _placeImages.asStateFlow()
+
+        private val _placeImages = MutableStateFlow<List<String>>(emptyList()) // image url list
+        private val _imageItems = MutableStateFlow<List<ImageItem>>(emptyList()) // image item list
+        val imageItems = _imageItems.asStateFlow()
+
         private val _postContent = MutableStateFlow("")
-        val postContent = _postContent.asStateFlow()
 
         private val _addPlaceState = MutableStateFlow<AddPlaceState>(AddPlaceState.AbleToAdd)
         val addPlaceState = _addPlaceState.asStateFlow()
@@ -60,6 +62,17 @@ class AddPlaceViewModel
                     }
                 }
             }
+
+            viewModelScopeEH.launch {
+                _placeImages.collect { placeImages ->
+                    _imageItems.update {
+                        mutableListOf<ImageItem>().apply {
+                            add(ImageItem.AddImage)
+                            addAll(placeImages.map { ImageItem.Image(it) })
+                        }
+                    }
+                }
+            }
         }
 
         fun onSelectPlaceCategory(placeCategory: PlaceCategory) {
@@ -72,6 +85,21 @@ class AddPlaceViewModel
 
         fun onPlaceAddressInput(placeAddress: String) {
             _placeAddress.update { placeAddress }
+        }
+
+        fun onImageUrisInput(imageUris: List<Uri>) {
+            Timber.d("imageUris: $imageUris")
+            // TODO: convert uri to file
+            // TODO: upload file to server & get url
+            // TODO: update _placeImages
+        }
+
+        fun deleteImage(imageUrl: String) {
+            _placeImages.update { it - imageUrl }
+        }
+
+        fun onPostContentInput(postContent: String) {
+            _postContent.update { postContent }
         }
 
         fun createPlace(): AddPostItem.Place =

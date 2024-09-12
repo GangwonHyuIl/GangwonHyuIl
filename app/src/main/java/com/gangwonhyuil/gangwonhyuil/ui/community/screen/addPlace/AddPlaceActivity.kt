@@ -10,8 +10,10 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivityAddPlaceBinding
@@ -27,11 +29,27 @@ import kotlinx.coroutines.launch
 
 const val EXTRA_PLACE_LIST_ID = "extra_place_list_id"
 
+interface OnImageItemAdapterClickListener {
+    fun onClickAddImage()
+
+    fun onClickImage(imageUrl: String)
+}
+
 @AndroidEntryPoint
-class AddPlaceActivity : BaseActivity<ActivityAddPlaceBinding>() {
+class AddPlaceActivity :
+    BaseActivity<ActivityAddPlaceBinding>(),
+    OnImageItemAdapterClickListener {
     private val viewModel by viewModels<AddPlaceViewModel>()
 
     override fun inflateBinding(inflater: LayoutInflater): ActivityAddPlaceBinding = ActivityAddPlaceBinding.inflate(layoutInflater)
+
+    private lateinit var imageItemAdapter: ImageItemAdapter
+    private val pickMultipleMedia =
+        registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uris ->
+            if (uris.isNotEmpty()) {
+                viewModel.onImageUrisInput(uris)
+            }
+        }
 
     private val searchPlaceActivityLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult: ActivityResult ->
@@ -56,6 +74,8 @@ class AddPlaceActivity : BaseActivity<ActivityAddPlaceBinding>() {
         initTopAppBar()
         initSpinner()
         initPlaceInfoLayout()
+        initImageRecyclerView()
+        initContentEditText()
     }
 
     private fun initTopAppBar() {
@@ -138,6 +158,17 @@ class AddPlaceActivity : BaseActivity<ActivityAddPlaceBinding>() {
         }
     }
 
+    private fun initImageRecyclerView() {
+        imageItemAdapter = ImageItemAdapter(this@AddPlaceActivity)
+        binding.rvPlaceImage.adapter = imageItemAdapter
+    }
+
+    private fun initContentEditText() {
+        binding.etPostContent.addTextChangedListener {
+            viewModel.onPostContentInput(it.toString())
+        }
+    }
+
     private fun initObserveViewModel() {
         with(viewModel) {
             lifecycleScope.launch {
@@ -148,6 +179,11 @@ class AddPlaceActivity : BaseActivity<ActivityAddPlaceBinding>() {
             lifecycleScope.launch {
                 placeAddress.collect {
                     binding.etPlaceAddress.setText(it)
+                }
+            }
+            lifecycleScope.launch {
+                imageItems.collect {
+                    imageItemAdapter.submitList(it)
                 }
             }
         }
@@ -161,5 +197,15 @@ class AddPlaceActivity : BaseActivity<ActivityAddPlaceBinding>() {
             Intent(context, AddPlaceActivity::class.java).apply {
                 putExtra(EXTRA_PLACE_LIST_ID, placeListId)
             }
+    }
+
+    override fun onClickAddImage() {
+        pickMultipleMedia.launch(
+            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+        )
+    }
+
+    override fun onClickImage(imageUrl: String) {
+        viewModel.deleteImage(imageUrl)
     }
 }

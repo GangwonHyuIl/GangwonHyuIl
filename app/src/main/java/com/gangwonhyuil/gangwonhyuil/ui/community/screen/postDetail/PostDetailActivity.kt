@@ -104,11 +104,7 @@ class PostDetailActivity :
                 return@setOnClickListener
             }
 
-            if (viewModel.onAddComment(comment)) {
-                binding.etAddComment.text.clear()
-            } else {
-                Toast.makeText(this, "댓글을 등록하지 못했습니다.", Toast.LENGTH_SHORT).show()
-            }
+            viewModel.onAddComment(comment)
 
             val inputMethodManager =
                 this@PostDetailActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -147,6 +143,34 @@ class PostDetailActivity :
             lifecycleScope.launch {
                 userId.collect { userId ->
                     postDetailItemAdapter.userId = userId
+                }
+            }
+            lifecycleScope.launch {
+                postDetailState.collect {
+                    when (it) {
+                        PostDetailState.Idle -> {
+                            // do nothing
+                        }
+
+                        PostDetailState.AddCommentSuccess -> {
+                            binding.etAddComment.text.clear()
+                            Toast
+                                .makeText(
+                                    this@PostDetailActivity,
+                                    "댓글이 등록되었습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                        }
+
+                        PostDetailState.AddCommentFail -> {
+                            Toast
+                                .makeText(
+                                    this@PostDetailActivity,
+                                    "댓글 등록에 실패했습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                        }
+                    }
                 }
             }
         }

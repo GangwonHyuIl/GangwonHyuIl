@@ -45,6 +45,9 @@ class PostDetailViewModel
         private val _isMyPost = MutableStateFlow(false)
         val isMyPost = _isMyPost.asStateFlow()
 
+        private val _postDetailState = MutableStateFlow<PostDetailState>(PostDetailState.Idle)
+        val postDetailState = _postDetailState.asStateFlow()
+
         init {
             with(savedStateHandle) {
                 get<Long>(EXTRA_POST_ID)?.let { postId ->
@@ -103,17 +106,20 @@ class PostDetailViewModel
             }
         }
 
-        fun onAddComment(comment: String): Boolean {
-            var isSuccessful = false
+        fun onAddComment(comment: String) {
             viewModelScopeEH.launch {
-                isSuccessful =
-                    addComment(
+                if (addComment(
                         postId = _postId.value ?: return@launch,
                         userId = _userId.value ?: return@launch,
                         content = comment
                     )
+                ) {
+                    // TODO: refresh comment list
+                    _postDetailState.update { PostDetailState.AddCommentSuccess }
+                } else {
+                    _postDetailState.update { PostDetailState.AddCommentFail }
+                }
             }
-            return isSuccessful
         }
 
         fun reportComment(
@@ -132,3 +138,11 @@ class PostDetailViewModel
             Timber.d("reportPost: $postId, reason: $reason")
         }
     }
+
+sealed interface PostDetailState {
+    data object Idle : PostDetailState
+
+    data object AddCommentSuccess : PostDetailState
+
+    data object AddCommentFail : PostDetailState
+}

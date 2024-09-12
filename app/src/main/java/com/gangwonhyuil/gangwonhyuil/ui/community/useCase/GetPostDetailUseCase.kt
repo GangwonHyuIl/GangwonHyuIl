@@ -18,7 +18,6 @@ class GetPostDetailUseCase
             when (val customResponse = getPostDetail(postId)) {
                 is CustomResponse.Success<*> -> {
                     with(customResponse.data as GetPostDetailResponse) {
-                        Timber.d(this.toString())
                         PostDetail(
                             id = postIdx.toLong(),
                             writerInfo =

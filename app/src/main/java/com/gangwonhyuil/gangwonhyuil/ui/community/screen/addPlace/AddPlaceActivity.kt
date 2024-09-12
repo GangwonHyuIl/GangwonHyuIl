@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -65,21 +66,38 @@ class AddPlaceActivity : BaseActivity<ActivityAddPlaceBinding>() {
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.add_place_add -> {
-                        val newPlace = viewModel.createPlace()
-                        setResult(
-                            RESULT_OK,
-                            Intent().apply {
-                                Gson().toJson(newPlace)?.let {
-                                    putExtra(EXTRA_PLACE_RESULT, it)
-                                }
-                            }
-                        )
-                        finish()
+                        addPlace()
                         true
                     }
 
                     else -> false
                 }
+            }
+        }
+    }
+
+    private fun addPlace() {
+        when (val addPlaceState = viewModel.addPlaceState.value) {
+            is AddPlaceState.AbleToAdd -> {
+                val newPlace = viewModel.createPlace()
+                setResult(
+                    RESULT_OK,
+                    Intent().apply {
+                        Gson().toJson(newPlace)?.let {
+                            putExtra(EXTRA_PLACE_RESULT, it)
+                        }
+                    }
+                )
+                finish()
+            }
+
+            is AddPlaceState.EmptyPlace -> {
+                Toast
+                    .makeText(
+                        this@AddPlaceActivity,
+                        addPlaceState.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
             }
         }
     }

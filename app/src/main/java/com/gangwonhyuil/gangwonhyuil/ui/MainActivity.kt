@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun viewPager() {
         val fragmentList =
-            listOf(HomeFragment(), AiFragment(), CommunityFragment(), ProfileFragment())
+            listOf(HomeFragment(), AiFragment(), CommunityFragment()) //, ProfileFragment()
         val viewPager = ViewPagerAdapter(this)
         viewPager.item = fragmentList
         binding.viewPager2.adapter = viewPager
@@ -67,10 +67,10 @@ class MainActivity : AppCompatActivity() {
                     binding.viewPager2.currentItem = 2
                     return@setOnItemSelectedListener true
                 }
-                R.id.navigation_profile -> {
-                    binding.viewPager2.currentItem = 3
-                    return@setOnItemSelectedListener true
-                }
+//                R.id.navigation_profile -> {
+//                    binding.viewPager2.currentItem = 3
+//                    return@setOnItemSelectedListener true
+//                }
                 else -> {
                     binding.viewPager2.currentItem = 4
                     return@setOnItemSelectedListener false

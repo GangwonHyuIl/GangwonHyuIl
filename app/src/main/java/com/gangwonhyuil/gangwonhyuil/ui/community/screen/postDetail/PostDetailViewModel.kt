@@ -114,7 +114,7 @@ class PostDetailViewModel
                         content = comment
                     )
                 ) {
-                    // TODO: refresh comment list
+                    _postDetail.update { getPostDetailDetail(_postId.value!!) }
                     _postDetailState.update { PostDetailState.AddCommentSuccess }
                 } else {
                     _postDetailState.update { PostDetailState.AddCommentFail }

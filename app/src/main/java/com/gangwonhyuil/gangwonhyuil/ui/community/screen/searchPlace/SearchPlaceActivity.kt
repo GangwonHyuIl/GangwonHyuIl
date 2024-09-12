@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -64,6 +65,16 @@ class SearchPlaceActivity :
                         .makeText(this@SearchPlaceActivity, "검색 키워드를 입력해주세요.", Toast.LENGTH_SHORT)
                         .show()
                 } else {
+                    val inputMethodManager =
+                        this@SearchPlaceActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    with(binding.etSearch) {
+                        clearFocus()
+                        inputMethodManager.hideSoftInputFromWindow(
+                            windowToken,
+                            0
+                        )
+                    }
+
                     viewModel.search(keyword)
                 }
             }

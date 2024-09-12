@@ -3,6 +3,7 @@ package com.gangwonhyuil.gangwonhyuil.data.remote.kakaoLogin
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
+import com.gangwonhyuil.gangwonhyuil.ui.onboarding.OnboardingViewModel
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -15,7 +16,8 @@ class KakaoLoginDataSource {
         UserApiClient.instance
     }
 
-    fun isLoginUserInfo() {
+    fun isLoginUserInfo(): String {
+        var userId = ""
         UserApiClient.instance.me { user, error ->
             if (error != null) {
                 Log.e(TAG, "사용자 정보 요청 실패", error)
@@ -27,8 +29,10 @@ class KakaoLoginDataSource {
                             "\n닉네임: ${user.kakaoAccount?.profile?.nickname}" +
                             "\n프로필사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}"
                 )
+                userId = user.id.toString()
             }
         }
+        return userId
     }
 
     suspend fun login(context: Context): String {

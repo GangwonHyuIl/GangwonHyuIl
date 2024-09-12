@@ -12,7 +12,7 @@
         android:id="@+id/navigation_community"
         android:title="커뮤니티" />
 
-    <item
-        android:id="@+id/navigation_profile"
-        android:title="프로필" />
+<!--    <item-->
+<!--        android:id="@+id/navigation_profile"-->
+<!--        android:title="프로필" />-->
 </menu>

@@ -1,13 +1,12 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.entity
 
-import java.net.URL
-
 data class PostDetail(
     val id: Long,
     val writerInfo: WriterInfo,
     val timeStamp: String,
     val content: String,
     val placeList: List<PlaceList>,
+    val comments: List<PostComment>,
 ) {
     data class PlaceList(
         val id: Long,
@@ -15,11 +14,19 @@ data class PostDetail(
         val places: List<Place>,
     ) {
         data class Place(
+            val id: Long,
             val category: PlaceCategory,
             val name: String,
             val address: String,
-            val images: List<URL> = emptyList(),
+            val images: List<String> = emptyList(),
             val content: String = "",
         )
     }
+
+    data class PostComment(
+        val id: Long,
+        val writerInfo: WriterInfo,
+        val timeStamp: String,
+        val content: String,
+    )
 }

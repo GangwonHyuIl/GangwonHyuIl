@@ -4,10 +4,12 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PlaceCategory
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.addPost.AddPostItem
+import com.gangwonhyuil.gangwonhyuil.util.FileUtil
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -19,17 +21,24 @@ class AddPlaceViewModel
     @Inject
     constructor(
         savedStateHandle: SavedStateHandle,
+        private val fileUtil: FileUtil,
     ) : BaseViewModel() {
         private val _placeListId = MutableStateFlow("")
+
         private val _placeCategory = MutableStateFlow(PlaceCategory.SHARED_OFFICE)
         private val _placeName = MutableStateFlow("")
         val placeName = _placeName.asStateFlow()
         private val _placeAddress = MutableStateFlow("")
         val placeAddress = _placeAddress.asStateFlow()
-        private val _placeImages = MutableStateFlow<List<Uri>>(emptyList())
-        val placeImages = _placeImages.asStateFlow()
+
+        private val _placeImages = MutableStateFlow<List<String>>(emptyList()) // image url list
+        private val _imageItems = MutableStateFlow<List<ImageItem>>(emptyList()) // image item list
+        val imageItems = _imageItems.asStateFlow()
+
         private val _postContent = MutableStateFlow("")
-        val postContent = _postContent.asStateFlow()
+
+        private val _addPlaceState = MutableStateFlow<AddPlaceState>(AddPlaceState.AbleToAdd)
+        val addPlaceState = _addPlaceState.asStateFlow()
 
         init {
             savedStateHandle.get<String>(EXTRA_PLACE_LIST_ID)?.let { placeListId ->
@@ -39,6 +48,31 @@ class AddPlaceViewModel
             viewModelScopeEH.launch {
                 exceptions.collect { e ->
                     Timber.e(e.message)
+                }
+            }
+
+            viewModelScopeEH.launch {
+                combine(_placeName, _placeAddress) { placeName, placeAddress ->
+                    placeName.isNotEmpty() && placeAddress.isNotEmpty()
+                }.collect { ableToAdd ->
+                    _addPlaceState.update {
+                        if (ableToAdd) {
+                            AddPlaceState.AbleToAdd
+                        } else {
+                            AddPlaceState.EmptyPlace
+                        }
+                    }
+                }
+            }
+
+            viewModelScopeEH.launch {
+                _placeImages.collect { placeImages ->
+                    _imageItems.update {
+                        mutableListOf<ImageItem>().apply {
+                            add(ImageItem.AddImage)
+                            addAll(placeImages.map { ImageItem.Image(it) })
+                        }
+                    }
                 }
             }
         }
@@ -55,6 +89,29 @@ class AddPlaceViewModel
             _placeAddress.update { placeAddress }
         }
 
+        fun onImageUrisInput(imageUris: List<Uri>) {
+            Timber.d("imageUris: $imageUris")
+
+            viewModelScopeEH.launch {
+                imageUris.forEach { uri ->
+                    viewModelScopeEH.launch {
+                        // convert uri to file
+                        val imageFile = fileUtil.uriToFile(uri)
+                        // TODO: upload file to server & get url
+                        // TODO: update _placeImages
+                    }
+                }
+            }
+        }
+
+        fun deleteImage(imageUrl: String) {
+            _placeImages.update { it - imageUrl }
+        }
+
+        fun onPostContentInput(postContent: String) {
+            _postContent.update { postContent }
+        }
+
         fun createPlace(): AddPostItem.Place =
             AddPostItem.Place(
                 placeListId = _placeListId.value,
@@ -65,3 +122,15 @@ class AddPlaceViewModel
                 content = _postContent.value
             )
     }
+
+sealed interface AddPlaceState {
+    val message: String
+
+    data object AbleToAdd : AddPlaceState {
+        override val message = ""
+    }
+
+    data object EmptyPlace : AddPlaceState {
+        override val message = "장소를 추가해 주세요"
+    }
+}

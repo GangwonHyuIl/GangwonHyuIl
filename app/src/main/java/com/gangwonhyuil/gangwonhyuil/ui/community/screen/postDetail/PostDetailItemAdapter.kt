@@ -14,7 +14,11 @@ import com.gangwonhyuil.gangwonhyuil.databinding.RvItemPostDetailPostBinding
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.ImageItem.Companion.toImageItems
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseAdapter
 
-class PostDetailItemAdapter : BaseAdapter<PostDetailItem>() {
+class PostDetailItemAdapter(
+    private val onClickListener: OnPlaceDetailItemAdapterClickListener,
+) : BaseAdapter<PostDetailItem>() {
+    var userId: Long? = null
+
     override fun createBinding(
         parent: ViewGroup,
         viewType: Int,
@@ -163,16 +167,35 @@ class PostDetailItemAdapter : BaseAdapter<PostDetailItem>() {
     ) : BaseViewHolder<PostDetailItem.CommentItem>(binding.root) {
         private val ivWriterImage = binding.ivCommentWriterImage
         private val tvWriterName = binding.tvCommentWriterName
-        private val tvCommentTime = binding.tvCommentTime
+        private val tvCommentAction = binding.tvCommentAction
         private val tvCommentContent = binding.tvCommentContent
+        private val tvCommentTime = binding.tvCommentTime
 
         override fun bind(item: PostDetailItem.CommentItem) {
             with(item) {
                 ivWriterImage.load(writerProfileImage)
                 tvWriterName.text = writerName
-                tvCommentTime.text = timeStamp
+
+                initCommentAction(item)
 
                 tvCommentContent.text = content
+                tvCommentTime.text = timeStamp
+            }
+        }
+
+        private fun initCommentAction(item: PostDetailItem.CommentItem) {
+            with(tvCommentAction) {
+                if (userId == item.writerId) {
+                    text = "삭제"
+                    setOnClickListener {
+                        onClickListener.onCommentDeleteClick(item)
+                    }
+                } else {
+                    text = "신고"
+                    setOnClickListener {
+                        onClickListener.onCommentReportClick(item)
+                    }
+                }
             }
         }
     }

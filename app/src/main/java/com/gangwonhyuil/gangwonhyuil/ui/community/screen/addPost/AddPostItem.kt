@@ -1,6 +1,5 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.screen.addPost
 
-import android.net.Uri
 import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PlaceCategory
 import com.gangwonhyuil.gangwonhyuil.util.base.Eigenvalue
 import java.util.UUID
@@ -27,7 +26,7 @@ sealed interface AddPostItem : Eigenvalue {
         val category: PlaceCategory,
         val name: String,
         val address: String,
-        val images: List<Uri>,
+        val images: List<String>,
         val content: String,
     ) : AddPostItem {
         override val viewType: Int = AddPostViewType.PLACE.type

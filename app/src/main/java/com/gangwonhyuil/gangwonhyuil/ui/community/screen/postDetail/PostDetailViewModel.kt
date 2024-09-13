@@ -1,11 +1,11 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail
 
 import androidx.lifecycle.SavedStateHandle
-import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostComment
 import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostDetail
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailItem.Companion.toCommentItems
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailItem.Companion.toPlaceItems
-import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetPostCommentsUseCase
+import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.AddCommentUseCase
+import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.DeletePostUseCase
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetPostDetailUseCase
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetUserIdUseCase
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
@@ -28,13 +28,14 @@ class PostDetailViewModel
         savedStateHandle: SavedStateHandle,
         private val getUserId: GetUserIdUseCase,
         private val getPostDetailDetail: GetPostDetailUseCase,
-        private val getPostComments: GetPostCommentsUseCase,
+        private val addComment: AddCommentUseCase,
+        private val deletePost: DeletePostUseCase,
     ) : BaseViewModel() {
         private val _postId = MutableStateFlow<Long?>(null)
         private val _userId = MutableStateFlow<Long?>(null)
+        val userId = _userId.asStateFlow()
 
         private val _postDetail = MutableStateFlow<PostDetail?>(null)
-        private val _postComments = MutableStateFlow<List<PostComment>>(emptyList())
         private val _postDetailItems = MutableStateFlow<List<PostDetailItem>>(emptyList())
         val postDetailItems = _postDetailItems.asStateFlow()
         val postContent: PostDetailItem.PostContent?
@@ -45,6 +46,9 @@ class PostDetailViewModel
 
         private val _isMyPost = MutableStateFlow(false)
         val isMyPost = _isMyPost.asStateFlow()
+
+        private val _postDetailState = MutableStateFlow<PostDetailState>(PostDetailState.Idle)
+        val postDetailState = _postDetailState.asStateFlow()
 
         init {
             with(savedStateHandle) {
@@ -69,29 +73,28 @@ class PostDetailViewModel
                 _postId.collect { postId ->
                     if (postId != null) {
                         _postDetail.update { getPostDetailDetail(postId) }
-                        _postComments.update { getPostComments(postId) }
                     }
                 }
             }
             viewModelScopeEH.launch {
-                combine(_postDetail, _postComments) { postDetail, postComments ->
-                    postDetail?.let {
-                        mutableListOf<PostDetailItem>().apply {
-                            add(
-                                PostDetailItem.PostContent(
-                                    id = it.id,
-                                    writerProfileImage = it.writerInfo.profileImage,
-                                    writerName = it.writerInfo.name,
-                                    timeStamp = it.timeStamp,
-                                    content = it.content
+                _postDetail.collect { postDetail ->
+                    val postDetailItems =
+                        postDetail?.let {
+                            mutableListOf<PostDetailItem>().apply {
+                                add(
+                                    PostDetailItem.PostContent(
+                                        id = it.id,
+                                        writerProfileImage = it.writerInfo.profileImage,
+                                        writerName = it.writerInfo.name,
+                                        timeStamp = it.timeStamp,
+                                        content = it.content
+                                    )
                                 )
-                            )
-                            addAll(toPlaceItems(it.placeList))
-                            add(PostDetailItem.CommentHeader)
-                            addAll(toCommentItems(postComments))
-                        }
-                    } ?: emptyList()
-                }.collect { postDetailItems ->
+                                addAll(toPlaceItems(it.placeList))
+                                add(PostDetailItem.CommentHeader)
+                                addAll(toCommentItems(it.comments))
+                            }
+                        } ?: emptyList()
                     _postDetailItems.update { postDetailItems }
                 }
             }
@@ -105,6 +108,30 @@ class PostDetailViewModel
             }
         }
 
+        fun onAddComment(comment: String) {
+            viewModelScopeEH.launch {
+                if (addComment(
+                        postId = _postId.value ?: return@launch,
+                        userId = _userId.value ?: return@launch,
+                        content = comment
+                    )
+                ) {
+                    _postDetail.update { getPostDetailDetail(_postId.value!!) }
+                    _postDetailState.update { PostDetailState.AddCommentSuccess }
+                } else {
+                    _postDetailState.update { PostDetailState.AddCommentFail }
+                }
+            }
+        }
+
+        fun reportComment(
+            commentId: Long,
+            reason: String,
+        ) {
+            // TODO: repost comment
+            Timber.d("reportComment: $commentId, reason: $reason")
+        }
+
         fun reportPost(
             postId: Long,
             reason: String,
@@ -112,4 +139,30 @@ class PostDetailViewModel
             // TODO: repost post
             Timber.d("reportPost: $postId, reason: $reason")
         }
+
+        fun deletePost() {
+            viewModelScopeEH.launch {
+                if (_postId.value == null) {
+                    _postDetailState.update { PostDetailState.DeletePostFail }
+                    return@launch
+                }
+                if (deletePost(_postId.value!!)) {
+                    _postDetailState.update { PostDetailState.DeletePostSuccess }
+                } else {
+                    _postDetailState.update { PostDetailState.DeletePostFail }
+                }
+            }
+        }
     }
+
+sealed interface PostDetailState {
+    data object Idle : PostDetailState
+
+    data object AddCommentSuccess : PostDetailState
+
+    data object AddCommentFail : PostDetailState
+
+    data object DeletePostSuccess : PostDetailState
+
+    data object DeletePostFail : PostDetailState
+}

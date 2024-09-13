@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".ui.community.screen.addPlace.AddPlaceActivity">
 
@@ -86,8 +87,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="8dp"
-                    android:textSize="18sp"
-                    android:text="장소 검색" />
+                    android:text="장소 검색"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout

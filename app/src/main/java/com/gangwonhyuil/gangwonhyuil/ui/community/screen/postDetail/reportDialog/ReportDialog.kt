@@ -1,4 +1,4 @@
-package com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.reportPost
+package com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.reportDialog
 
 import android.app.Dialog
 import android.content.Context
@@ -9,14 +9,16 @@ import android.view.WindowManager
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import com.gangwonhyuil.gangwonhyuil.databinding.DialogRepostPostBinding
-import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.OnReportPostDialogClickListener
+import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.OnReportDialogClickListener
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailItem
 import timber.log.Timber
 
-class ReportPostDialog(
+interface ReportableItem
+
+class ReportDialog(
     context: Context,
-    private val postContent: PostDetailItem.PostContent,
-    private val onClickListener: OnReportPostDialogClickListener,
+    private val reportableItem: ReportableItem,
+    private val onClickListener: OnReportDialogClickListener,
 ) : Dialog(context) {
     private lateinit var binding: DialogRepostPostBinding
     private var reason = ""
@@ -34,12 +36,26 @@ class ReportPostDialog(
     }
 
     private fun initView() {
-        with(binding) {
-            tvPostTitle.text = postContent.content
-            tvPostWriter.text = postContent.writerName
+        initTextViews()
+        initRadioGroup()
+        initButtons()
+    }
 
-            initRadioGroup()
-            initButtons()
+    private fun initTextViews() {
+        with(binding) {
+            when (reportableItem) {
+                is PostDetailItem.PostContent -> {
+                    tvContentLabel.text = "게시글"
+                    tvContent.text = reportableItem.content
+                    tvWriter.text = reportableItem.writerName
+                }
+
+                is PostDetailItem.CommentItem -> {
+                    tvContentLabel.text = "댓글"
+                    tvContent.text = reportableItem.content
+                    tvWriter.text = reportableItem.writerName
+                }
+            }
         }
     }
 
@@ -77,7 +93,7 @@ class ReportPostDialog(
                 if (reason.isEmpty()) {
                     binding.tvReasonMessage.setTextColor(android.graphics.Color.RED)
                 } else {
-                    onClickListener.onReportClick(postContent.id, reason)
+                    onClickListener.onReportClick(reportableItem, reason)
                     dismiss()
                 }
             }

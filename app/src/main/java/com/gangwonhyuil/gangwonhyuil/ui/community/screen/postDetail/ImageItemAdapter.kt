@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 import coil.load
-import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.VpItemPlaceDetailImageBinding
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseAdapter
 
@@ -28,10 +27,7 @@ class ImageItemAdapter : BaseAdapter<ImageItem>() {
         private val ivPlaceImage = binding.ivPlaceImage
 
         override fun bind(item: ImageItem) {
-            ivPlaceImage.load(item.url) {
-                // TODO: change place holder image
-                fallback(R.drawable.ic_launcher_foreground)
-            }
+            ivPlaceImage.load(item.url)
         }
     }
 }

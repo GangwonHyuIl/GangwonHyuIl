@@ -37,7 +37,7 @@ class GetPostDetailUseCase
                                             it.places?.map { place ->
                                                 PostDetail.PlaceList.Place(
                                                     id = place.placeIdx.toLong(),
-                                                    category = PlaceCategory.SHARED_OFFICE, // TODO: get from response
+                                                    category = PlaceCategory.fromCode(place.placeCategoryCode),
                                                     name = place.placeTitle,
                                                     address = place.placeAddress,
                                                     images =
@@ -55,8 +55,8 @@ class GetPostDetailUseCase
                                         writerInfo =
                                             WriterInfo(
                                                 id = it.writerIdx.toLong(),
-                                                name = "", // TODO: get from response
-                                                profileImage = null // TODO: get from response
+                                                name = it.writerName ?: "",
+                                                profileImage = it.writerProfileImage
                                             ),
                                         timeStamp = it.createdAt,
                                         content = it.content

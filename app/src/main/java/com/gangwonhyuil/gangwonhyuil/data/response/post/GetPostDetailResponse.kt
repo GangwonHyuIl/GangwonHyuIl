@@ -31,8 +31,8 @@ data class GetPostDetailResponse(
         data class Place(
             @SerializedName("place_idx")
             val placeIdx: Int,
-//            @SerializedName("place_category")
-//            val placeCategoryCode: Int,
+            @SerializedName("place_type")
+            val placeCategoryCode: Int,
             @SerializedName("place_title")
             val placeTitle: String,
             @SerializedName("place_address")
@@ -54,9 +54,13 @@ data class GetPostDetailResponse(
         val commentIdx: Int,
         @SerializedName("user_idx")
         val writerIdx: Int,
-        @SerializedName("created_at")
+        @SerializedName("user_nickname")
+        val writerName: String?,
+        @SerializedName("user_profile_image")
+        val writerProfileImage: String?,
+        @SerializedName("comment_created_at")
         val createdAt: String,
-        @SerializedName("comment_contents")
+        @SerializedName("comment_content")
         val content: String,
     )
 }

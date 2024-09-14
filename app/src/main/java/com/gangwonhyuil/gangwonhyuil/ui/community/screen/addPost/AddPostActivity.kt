@@ -82,16 +82,21 @@ class AddPostActivity :
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.add_post_register -> {
-                        if (viewModel.registerState is RegisterState.AbleToRegister) {
-                            viewModel.registerPost()
-                            finish()
-                        } else {
-                            Toast
-                                .makeText(
-                                    this@AddPostActivity,
-                                    viewModel.registerState.message,
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                        when (val addPostStart = viewModel.addPostState.value) {
+                            is AddPostState.Idle -> {
+                                viewModel.registerPost()
+                            }
+
+                            is AddPostState.CannotRegister -> {
+                                Toast
+                                    .makeText(
+                                        this@AddPostActivity,
+                                        addPostStart.message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                            }
+
+                            else -> {} // do nothing
                         }
                         true
                     }
@@ -112,6 +117,27 @@ class AddPostActivity :
             lifecycleScope.launch {
                 addPostItems.collect { addPostItems ->
                     placeListItemAdapter.submitList(addPostItems)
+                }
+            }
+            lifecycleScope.launch {
+                addPostState.collect {
+                    when (it) {
+                        is AddPostState.AddPostSuccess -> {
+                            Toast
+                                .makeText(this@AddPostActivity, it.message, Toast.LENGTH_SHORT)
+                                .show()
+                            finish()
+                        }
+
+                        is AddPostState.AddPostFailure -> {
+                            Toast
+                                .makeText(this@AddPostActivity, it.message, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+
+                        else -> {} // do nothing
+                    }
+                    viewModel.refreshState()
                 }
             }
         }
@@ -158,7 +184,7 @@ class AddPostActivity :
                 "장소 목록이 삭제되었습니다.",
                 Snackbar.LENGTH_LONG
             ).setAction("삭제 취소") {
-                viewModel.undonDeletePlaceList(placeListId)
+                viewModel.rollbackDeletePlaceList()
             }.show()
     }
 
@@ -183,7 +209,7 @@ class AddPostActivity :
                 "장소가 삭제되었습니다.",
                 Snackbar.LENGTH_LONG
             ).setAction("삭제 취소") {
-                viewModel.undonDeletePlace(placeId)
+                viewModel.rollbackDeletePlace()
             }.show()
     }
 

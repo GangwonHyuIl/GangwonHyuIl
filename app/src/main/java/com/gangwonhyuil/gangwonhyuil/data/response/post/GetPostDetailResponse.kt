@@ -25,7 +25,7 @@ data class GetPostDetailResponse(
         val placeListIdx: Int,
         @SerializedName("category_name")
         val placeListName: String,
-        @SerializedName("place_list")
+        @SerializedName("place_details")
         val places: List<Place>?,
     ) {
         data class Place(

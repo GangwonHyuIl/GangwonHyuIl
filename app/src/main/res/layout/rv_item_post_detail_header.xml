@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/gray"
+    android:background="@color/light_gray"
     android:paddingHorizontal="16dp"
     android:paddingVertical="4dp">
 
@@ -11,7 +11,6 @@
         android:id="@+id/tv_place_list_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:textStyle="bold"
+        android:textSize="20sp"
         tools:text="공유 오피스 목록" />
 </LinearLayout>

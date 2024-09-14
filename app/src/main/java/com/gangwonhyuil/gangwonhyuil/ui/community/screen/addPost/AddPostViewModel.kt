@@ -1,5 +1,6 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.screen.addPost
 
+import com.gangwonhyuil.gangwonhyuil.ui.community.entity.AddPost
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.AddPostUseCase
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetUserIdUseCase
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
@@ -148,7 +149,37 @@ class AddPostViewModel
         fun registerPost() {
             viewModelScopeEH.launch {
                 val userId = getUserId()
-                if (addPost(userId, addPostItems.value)) {
+                val postContent = _content.value.content
+                val placeLists =
+                    mutableListOf<AddPost.PlaceList>().apply {
+                        for (placeList in _placeLists.value) {
+                            val places: List<AddPost.PlaceList.Place> =
+                                _places.value
+                                    .filter { it.placeListId == placeList.id }
+                                    .map {
+                                        AddPost.PlaceList.Place(
+                                            placeName = it.name,
+                                            placeCategoryCode = it.category.code,
+                                            placeAddress = it.address,
+                                            placeContent = it.content,
+                                            placeImages = it.images
+                                        )
+                                    }
+                            add(
+                                AddPost.PlaceList(
+                                    placeListName = placeList.name,
+                                    places = places
+                                )
+                            )
+                        }
+                    }
+                val addPost =
+                    AddPost(
+                        writerId = userId.toInt(),
+                        postContent = postContent,
+                        placeLists = placeLists
+                    )
+                if (addPost(addPost)) {
                     _addPostState.update { AddPostState.AddPostSuccess }
                 } else {
                     _addPostState.update { AddPostState.AddPostFailure }

@@ -1,6 +1,7 @@
 package com.gangwonhyuil.gangwonhyuil.data.remote.post
 
 import com.gangwonhyuil.gangwonhyuil.data.request.post.AddCommentRequest
+import com.gangwonhyuil.gangwonhyuil.data.request.post.DeleteCommentRequest
 import com.gangwonhyuil.gangwonhyuil.data.request.post.DeletePostRequest
 import com.gangwonhyuil.gangwonhyuil.data.response.post.AddCommentResponse
 import com.gangwonhyuil.gangwonhyuil.data.response.post.DeletePostResponse
@@ -24,6 +25,11 @@ interface PostDataSource {
     suspend fun addComment(
         @Body addCommentRequest: AddCommentRequest,
     ): AddCommentResponse
+
+    @POST("rpc/delete_comment")
+    suspend fun deleteComment(
+        @Body deleteCommentRequest: DeleteCommentRequest,
+    )
 
     @POST("rpc/delete_post")
     suspend fun deletePost(

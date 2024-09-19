@@ -1,4 +1,4 @@
-package com.gangwonhyuil.gangwonhyuil.ui.profile
+package com.gangwonhyuil.gangwonhyuil.ui.profile.screen.myReviews
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gangwonhyuil.gangwonhyuil.data.response.post.GetPostsResponse
 import com.gangwonhyuil.gangwonhyuil.databinding.ItemPostBinding
 
-class MyPostListAdapter : ListAdapter<GetPostsResponse, MyPostListAdapter.Holder>(
+class MyReviewsListAdapter : ListAdapter<GetPostsResponse, MyReviewsListAdapter.Holder>(
 TourItemDiffCallback()
 ) {
     class TourItemDiffCallback : DiffUtil.ItemCallback<GetPostsResponse>() {

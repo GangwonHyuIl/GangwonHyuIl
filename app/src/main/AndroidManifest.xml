@@ -69,6 +69,12 @@
                     android:scheme="kakao83ed3419c90df461922f69facba26d20" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.profile.screen.myReviews.MyReviewsActivity"
+            android:exported="true"/>
+        <activity android:name=".ui.profile.screen.myPosts.MyPostsActivity"
+            android:exported="true"/>
+        <activity android:name=".ui.profile.screen.setting.SettingActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>

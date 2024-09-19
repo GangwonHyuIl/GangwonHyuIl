@@ -2,14 +2,13 @@ package com.gangwonhyuil.gangwonhyuil.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.gangwonhyuil.gangwonhyuil.R
 import com.gangwonhyuil.gangwonhyuil.databinding.ActivityMainBinding
 import com.gangwonhyuil.gangwonhyuil.ui.ai.AiFragment
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.community.CommunityFragment
 import com.gangwonhyuil.gangwonhyuil.ui.home.HomeFragment
-import com.gangwonhyuil.gangwonhyuil.ui.profile.ProfileFragment
+import com.gangwonhyuil.gangwonhyuil.ui.profile.screen.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun viewPager() {
         val fragmentList =
-            listOf(HomeFragment(), AiFragment(), CommunityFragment()) //, ProfileFragment()
+            listOf(HomeFragment(), AiFragment(), CommunityFragment(), ProfileFragment())
         val viewPager = ViewPagerAdapter(this)
         viewPager.item = fragmentList
         binding.viewPager2.adapter = viewPager
@@ -67,10 +66,10 @@ class MainActivity : AppCompatActivity() {
                     binding.viewPager2.currentItem = 2
                     return@setOnItemSelectedListener true
                 }
-//                R.id.navigation_profile -> {
-//                    binding.viewPager2.currentItem = 3
-//                    return@setOnItemSelectedListener true
-//                }
+                R.id.navigation_profile -> {
+                    binding.viewPager2.currentItem = 3
+                    return@setOnItemSelectedListener true
+                }
                 else -> {
                     binding.viewPager2.currentItem = 4
                     return@setOnItemSelectedListener false

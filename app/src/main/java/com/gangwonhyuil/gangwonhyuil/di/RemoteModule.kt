@@ -8,6 +8,7 @@ import com.gangwonhyuil.gangwonhyuil.data.remote.kakaoLogin.KakaoLoginInterface
 import com.gangwonhyuil.gangwonhyuil.data.remote.kakaoLogin.KakaoSignupInterface
 import com.gangwonhyuil.gangwonhyuil.data.remote.office.OfficeDataSource
 import com.gangwonhyuil.gangwonhyuil.data.remote.post.PostDataSource
+import com.gangwonhyuil.gangwonhyuil.data.remote.profile.ProfileDataSource
 import com.gangwonhyuil.gangwonhyuil.data.remote.tour.TourDataSource
 import com.gangwonhyuil.gangwonhyuil.data.remote.weather.WeatherDataSource
 import dagger.Module
@@ -86,6 +87,16 @@ object RemoteModule {
             customInterceptor = supabaseInterceptor
         ).create(
             KakaoSignupInterface::class.java
+        )
+
+    @Singleton
+    @Provides
+    fun provideProfileDataSource(supabaseInterceptor: SupabaseInterceptor): ProfileDataSource =
+        createRetrofit(
+            SUPABASE_BASE_URL,
+            customInterceptor = supabaseInterceptor
+        ).create(
+            ProfileDataSource::class.java
         )
 
     private fun createRetrofit(

@@ -1,5 +1,8 @@
 package com.gangwonhyuil.gangwonhyuil.ui.community.screen.addPost
 
+import com.gangwonhyuil.gangwonhyuil.ui.community.entity.AddPost
+import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.AddPostUseCase
+import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetUserIdUseCase
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +18,10 @@ import javax.inject.Inject
 @HiltViewModel
 class AddPostViewModel
     @Inject
-    constructor() : BaseViewModel() {
+    constructor(
+        private val getUserId: GetUserIdUseCase,
+        private val addPost: AddPostUseCase,
+    ) : BaseViewModel() {
         private val _content = MutableStateFlow(AddPostItem.Content(""))
         private val _placeLists = MutableStateFlow<List<AddPostItem.PlaceList>>(emptyList())
         private val _places = MutableStateFlow<List<AddPostItem.Place>>(emptyList())
@@ -26,8 +32,8 @@ class AddPostViewModel
         private val _addPostItems = MutableStateFlow<List<AddPostItem>>(emptyList())
         val addPostItems = _addPostItems.asStateFlow()
 
-        private var _registerState: RegisterState = RegisterState.EmptyContent
-        val registerState: RegisterState get() = _registerState
+        private val _addPostState = MutableStateFlow<AddPostState>(AddPostState.Idle)
+        val addPostState = _addPostState.asStateFlow()
 
         init {
             viewModelScopeEH.launch {
@@ -51,11 +57,11 @@ class AddPostViewModel
                 _addPostItems.update { items }
 
                 // set register state
-                _registerState =
+                _addPostState.update {
                     if (content.content.isEmpty()) {
-                        RegisterState.EmptyContent
+                        AddPostState.CannotRegister.EmptyContent
                     } else if (placeLists.any { it.name.isEmpty() }) {
-                        RegisterState.EmptyPlaceListName
+                        AddPostState.CannotRegister.EmptyPlaceListName
                     } else {
                         var isAnyPlaceListEmpty = false
                         for (placeList in placeLists) {
@@ -64,8 +70,13 @@ class AddPostViewModel
                                 break
                             }
                         }
-                        if (isAnyPlaceListEmpty) RegisterState.EmptyPlaceList else RegisterState.AbleToRegister
+                        if (isAnyPlaceListEmpty) {
+                            AddPostState.CannotRegister.EmptyPlaceList
+                        } else {
+                            AddPostState.Idle
+                        }
                     }
+                }
             }.launchIn(viewModelScopeEH)
         }
 
@@ -96,7 +107,7 @@ class AddPostViewModel
             }
         }
 
-        fun undonDeletePlaceList(placeListId: String) {
+        fun rollbackDeletePlaceList() {
             _placeLists.update { placeLists ->
                 placeLists + deletedPlaceList!!
             }
@@ -121,7 +132,7 @@ class AddPostViewModel
             }
         }
 
-        fun undonDeletePlace(placeId: String) {
+        fun rollbackDeletePlace() {
             _places.update { places ->
                 places + deletedPlaces
             }
@@ -136,27 +147,75 @@ class AddPostViewModel
         }
 
         fun registerPost() {
-            // TODO: register post
-            Timber.d("registerPost")
+            viewModelScopeEH.launch {
+                val userId = getUserId()
+                val postContent = _content.value.content
+                val placeLists =
+                    mutableListOf<AddPost.PlaceList>().apply {
+                        for (placeList in _placeLists.value) {
+                            val places: List<AddPost.PlaceList.Place> =
+                                _places.value
+                                    .filter { it.placeListId == placeList.id }
+                                    .map {
+                                        AddPost.PlaceList.Place(
+                                            placeName = it.name,
+                                            placeCategoryCode = it.category.code,
+                                            placeAddress = it.address,
+                                            placeContent = it.content,
+                                            placeImages = it.images
+                                        )
+                                    }
+                            add(
+                                AddPost.PlaceList(
+                                    placeListName = placeList.name,
+                                    places = places
+                                )
+                            )
+                        }
+                    }
+                val addPost =
+                    AddPost(
+                        writerId = userId.toInt(),
+                        postContent = postContent,
+                        placeLists = placeLists
+                    )
+                if (addPost(addPost)) {
+                    _addPostState.update { AddPostState.AddPostSuccess }
+                } else {
+                    _addPostState.update { AddPostState.AddPostFailure }
+                }
+            }
+        }
+
+        fun refreshState() {
+            _addPostState.update { AddPostState.Idle }
         }
     }
 
-sealed interface RegisterState {
-    val message: String
+sealed interface AddPostState {
+    data object Idle : AddPostState
 
-    data object AbleToRegister : RegisterState {
-        override val message = ""
+    sealed interface CannotRegister : AddPostState {
+        val message: String
+
+        data object EmptyContent : CannotRegister {
+            override val message = "게시글 내용을 입력해주세요"
+        }
+
+        data object EmptyPlaceListName : CannotRegister {
+            override val message = "장소 목록 이름을 입력해주세요"
+        }
+
+        data object EmptyPlaceList : CannotRegister {
+            override val message = "장소 목록에 장소를 추가해주세요"
+        }
     }
 
-    data object EmptyContent : RegisterState {
-        override val message = "게시글 내용을 입력해주세요"
+    data object AddPostSuccess : AddPostState {
+        val message = "게시글이 등록되었습니다."
     }
 
-    data object EmptyPlaceListName : RegisterState {
-        override val message = "장소 목록 이름을 입력해주세요"
-    }
-
-    data object EmptyPlaceList : RegisterState {
-        override val message = "장소 목록에 장소를 추가해주세요"
+    data object AddPostFailure : AddPostState {
+        val message = "게시글 등록에 실패했습니다."
     }
 }

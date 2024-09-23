@@ -57,7 +57,6 @@ class PostDetailActivity :
     private fun initTopAppBar() {
         with(binding.topAppBar) {
             setNavigationOnClickListener {
-                Timber.d("back button clicked")
                 finish()
             }
             setOnMenuItemClickListener { menuItem ->
@@ -145,49 +144,26 @@ class PostDetailActivity :
                 }
             }
             lifecycleScope.launch {
-                postDetailState.collect {
-                    when (it) {
-                        PostDetailState.Idle -> {
-                            // do nothing
-                        }
-
+                postDetailState.collect { postDetailState ->
+                    when (postDetailState) {
                         PostDetailState.AddCommentSuccess -> {
                             binding.etAddComment.text.clear()
-                            Toast
-                                .makeText(
-                                    this@PostDetailActivity,
-                                    "댓글이 등록되었습니다.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                            viewModel.resetPostDetailState()
                         }
-
-                        PostDetailState.AddCommentFail -> {
-                            Toast
-                                .makeText(
-                                    this@PostDetailActivity,
-                                    "댓글 등록에 실패했습니다.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                        }
-
-                        PostDetailState.DeletePostSuccess -> {
-                            Toast
-                                .makeText(
-                                    this@PostDetailActivity,
-                                    "게시글이 삭제되었습니다.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            finish()
-                        }
-
-                        PostDetailState.DeletePostFail -> {
-                            Toast
-                                .makeText(
-                                    this@PostDetailActivity,
-                                    "게시글 삭제에 실패했습니다.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                        }
+                        PostDetailState.Idle -> {} // do nothing
+                    }
+                }
+            }
+            lifecycleScope.launch {
+                postDetailToastMsg.collect { toastMsg ->
+                    toastMsg?.let {
+                        Toast
+                            .makeText(
+                                this@PostDetailActivity,
+                                toastMsg.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        viewModel.resetPostDetailToastMsg()
                     }
                 }
             }
@@ -202,7 +178,6 @@ class PostDetailActivity :
             is PostDetailItem.PostContent -> viewModel.reportPost(reportableItem.id, reason)
             is PostDetailItem.CommentItem -> viewModel.reportComment(reportableItem.id, reason)
         }
-        Toast.makeText(this, "신고가 접수되었습니다.", Toast.LENGTH_SHORT).show()
     }
 
     override fun onCommentReportClick(comment: PostDetailItem.CommentItem) {
@@ -210,8 +185,7 @@ class PostDetailActivity :
     }
 
     override fun onCommentDeleteClick(comment: PostDetailItem.CommentItem) {
-        // TODO: delete comment
-        Timber.d("delete comment, comment: $comment")
+        viewModel.onDeleteComment(comment.id)
     }
 
     companion object {

@@ -118,8 +118,6 @@ class PostDetailItemAdapter(
     inner class PlaceItemViewHolder(
         binding: RvItemPostDetailPlaceBinding,
     ) : BaseViewHolder<PostDetailItem.PlaceItem>(binding.root) {
-        private val imageItemAdapter = ImageItemAdapter()
-
         private val tvPlaceName = binding.tvPlaceName
 
         private val toggleButton = binding.btnTogglePlaceDetail
@@ -132,8 +130,17 @@ class PostDetailItemAdapter(
         override fun bind(placeItem: PostDetailItem.PlaceItem) {
             with(placeItem) {
                 tvPlaceName.text = name
-                vpPlaceImage.adapter = imageItemAdapter
-                imageItemAdapter.submitList(toImageItems(images))
+                vpPlaceImage.run {
+                    if (images.isEmpty()) {
+                        visibility = View.GONE
+                    } else {
+                        visibility = View.VISIBLE
+                        ImageItemAdapter().also {
+                            adapter = it
+                            submitList(toImageItems(images))
+                        }
+                    }
+                }
                 tvPlaceAddress.text = address
                 tvPlaceDetailContent.text = content
             }

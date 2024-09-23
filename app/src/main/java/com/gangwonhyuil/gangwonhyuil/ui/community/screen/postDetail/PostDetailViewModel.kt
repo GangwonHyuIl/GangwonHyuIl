@@ -5,6 +5,7 @@ import com.gangwonhyuil.gangwonhyuil.ui.community.entity.PostDetail
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailItem.Companion.toCommentItems
 import com.gangwonhyuil.gangwonhyuil.ui.community.screen.postDetail.PostDetailItem.Companion.toPlaceItems
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.AddCommentUseCase
+import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.DeleteCommentUseCase
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.DeletePostUseCase
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetPostDetailUseCase
 import com.gangwonhyuil.gangwonhyuil.ui.community.useCase.GetUserIdUseCase
@@ -29,6 +30,7 @@ class PostDetailViewModel
         private val getUserId: GetUserIdUseCase,
         private val getPostDetailDetail: GetPostDetailUseCase,
         private val addComment: AddCommentUseCase,
+        private val deleteComment: DeleteCommentUseCase,
         private val deletePost: DeletePostUseCase,
     ) : BaseViewModel() {
         private val _postId = MutableStateFlow<Long?>(null)
@@ -49,6 +51,8 @@ class PostDetailViewModel
 
         private val _postDetailState = MutableStateFlow<PostDetailState>(PostDetailState.Idle)
         val postDetailState = _postDetailState.asStateFlow()
+        private val _postDetailToastMsg = MutableStateFlow<PostDetailToastMsg?>(null)
+        val postDetailToastMsg = _postDetailToastMsg.asStateFlow()
 
         init {
             with(savedStateHandle) {
@@ -118,8 +122,20 @@ class PostDetailViewModel
                 ) {
                     _postDetail.update { getPostDetailDetail(_postId.value!!) }
                     _postDetailState.update { PostDetailState.AddCommentSuccess }
+                    _postDetailToastMsg.update { PostDetailToastMsg.ADD_COMMENT_SUCCESS }
                 } else {
-                    _postDetailState.update { PostDetailState.AddCommentFail }
+                    _postDetailToastMsg.update { PostDetailToastMsg.ADD_COMMENT_FAIL }
+                }
+            }
+        }
+
+        fun onDeleteComment(commentId: Long) {
+            viewModelScopeEH.launch {
+                if (deleteComment(commentId)) {
+                    _postDetail.update { getPostDetailDetail(_postId.value!!) }
+                    _postDetailToastMsg.update { PostDetailToastMsg.DELETE_COMMENT_SUCCESS }
+                } else {
+                    _postDetailToastMsg.update { PostDetailToastMsg.DELETE_COMMENT_FAIL }
                 }
             }
         }
@@ -130,6 +146,7 @@ class PostDetailViewModel
         ) {
             // TODO: repost comment
             Timber.d("reportComment: $commentId, reason: $reason")
+            _postDetailToastMsg.update { PostDetailToastMsg.REPORT_COMMENT_SUCCESS }
         }
 
         fun reportPost(
@@ -138,20 +155,29 @@ class PostDetailViewModel
         ) {
             // TODO: repost post
             Timber.d("reportPost: $postId, reason: $reason")
+            _postDetailToastMsg.update { PostDetailToastMsg.REPORT_POST_SUCCESS }
         }
 
         fun deletePost() {
             viewModelScopeEH.launch {
                 if (_postId.value == null) {
-                    _postDetailState.update { PostDetailState.DeletePostFail }
+                    _postDetailToastMsg.update { PostDetailToastMsg.DELETE_POST_FAIL }
                     return@launch
                 }
                 if (deletePost(_postId.value!!)) {
-                    _postDetailState.update { PostDetailState.DeletePostSuccess }
+                    _postDetailToastMsg.update { PostDetailToastMsg.DELETE_POST_SUCCESS }
                 } else {
-                    _postDetailState.update { PostDetailState.DeletePostFail }
+                    _postDetailToastMsg.update { PostDetailToastMsg.DELETE_POST_FAIL }
                 }
             }
+        }
+
+        fun resetPostDetailState() {
+            _postDetailState.update { PostDetailState.Idle }
+        }
+
+        fun resetPostDetailToastMsg() {
+            _postDetailToastMsg.update { null }
         }
     }
 
@@ -159,10 +185,19 @@ sealed interface PostDetailState {
     data object Idle : PostDetailState
 
     data object AddCommentSuccess : PostDetailState
+}
 
-    data object AddCommentFail : PostDetailState
-
-    data object DeletePostSuccess : PostDetailState
-
-    data object DeletePostFail : PostDetailState
+enum class PostDetailToastMsg(
+    val message: String,
+) {
+    ADD_COMMENT_SUCCESS("댓글이 등록되었습니다."),
+    ADD_COMMENT_FAIL("댓글 등록에 실패했습니다."),
+    DELETE_COMMENT_SUCCESS("댓글이 삭제되었습니다."),
+    DELETE_COMMENT_FAIL("댓글 삭제에 실패했습니다."),
+    REPORT_COMMENT_SUCCESS("댓글 신고가 접수되었습니다."),
+    REPORT_COMMENT_FAIL("댓글 신고 접수에 실패했습니다."),
+    DELETE_POST_SUCCESS("게시글이 삭제되었습니다."),
+    DELETE_POST_FAIL("게시글 삭제에 실패했습니다."),
+    REPORT_POST_SUCCESS("게시글 신고가 접수되었습니다."),
+    REPORT_POST_FAIL("게시글 신고 접수에 실패했습니다."),
 }

@@ -1,8 +1,11 @@
 package com.gangwonhyuil.gangwonhyuil.data.remote.post
 
 import com.gangwonhyuil.gangwonhyuil.data.request.post.AddCommentRequest
+import com.gangwonhyuil.gangwonhyuil.data.request.post.AddPostRequest
+import com.gangwonhyuil.gangwonhyuil.data.request.post.DeleteCommentRequest
 import com.gangwonhyuil.gangwonhyuil.data.request.post.DeletePostRequest
 import com.gangwonhyuil.gangwonhyuil.data.response.post.AddCommentResponse
+import com.gangwonhyuil.gangwonhyuil.data.response.post.AddPostResponse
 import com.gangwonhyuil.gangwonhyuil.data.response.post.DeletePostResponse
 import com.gangwonhyuil.gangwonhyuil.data.response.post.GetPostDetailResponse
 import com.gangwonhyuil.gangwonhyuil.data.response.post.GetPostsResponse
@@ -24,6 +27,16 @@ interface PostDataSource {
     suspend fun addComment(
         @Body addCommentRequest: AddCommentRequest,
     ): AddCommentResponse
+
+    @POST("rpc/delete_comment")
+    suspend fun deleteComment(
+        @Body deleteCommentRequest: DeleteCommentRequest,
+    )
+
+    @POST("rpc/post_create")
+    suspend fun addPost(
+        @Body addPostRequest: AddPostRequest,
+    ): AddPostResponse
 
     @POST("rpc/delete_post")
     suspend fun deletePost(

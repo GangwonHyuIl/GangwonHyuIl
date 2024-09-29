@@ -29,7 +29,7 @@ constructor(
     ): CustomResponse =
         try {
             val response =
-                profileDataSource.getUserReviews("eq.$userIdx")
+                profileDataSource.getUserReviews("eq.$userIdx")[0]
             CustomResponse.Success(response)
         } catch (e: Exception) {
             Timber.e(e)

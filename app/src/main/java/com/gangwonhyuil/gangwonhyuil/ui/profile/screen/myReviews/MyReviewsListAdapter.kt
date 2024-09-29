@@ -2,27 +2,29 @@ package com.gangwonhyuil.gangwonhyuil.ui.profile.screen.myReviews
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.gangwonhyuil.gangwonhyuil.data.response.post.GetPostsResponse
+import com.gangwonhyuil.gangwonhyuil.data.response.profile.UserReviewsResponse
 import com.gangwonhyuil.gangwonhyuil.databinding.ItemPostBinding
+import com.gangwonhyuil.gangwonhyuil.databinding.RvItemReviewBinding
 
-class MyReviewsListAdapter : ListAdapter<GetPostsResponse, MyReviewsListAdapter.Holder>(
+class MyReviewsListAdapter : ListAdapter<UserReviewsResponse.UserReviewsResponseItem, MyReviewsListAdapter.Holder>(
 TourItemDiffCallback()
 ) {
-    class TourItemDiffCallback : DiffUtil.ItemCallback<GetPostsResponse>() {
-        override fun areItemsTheSame(oldItem: GetPostsResponse, newItem: GetPostsResponse): Boolean {
-            return oldItem.postTitle == newItem.postTitle
+    class TourItemDiffCallback : DiffUtil.ItemCallback<UserReviewsResponse.UserReviewsResponseItem>() {
+        override fun areItemsTheSame(oldItem: UserReviewsResponse.UserReviewsResponseItem, newItem: UserReviewsResponse.UserReviewsResponseItem): Boolean {
+            return oldItem.reviewContent == newItem.reviewContent
         }
-        override fun areContentsTheSame(oldItem: GetPostsResponse, newItem: GetPostsResponse): Boolean {
-            return oldItem.postTitle == newItem.postTitle
+        override fun areContentsTheSame(oldItem: UserReviewsResponse.UserReviewsResponseItem, newItem: UserReviewsResponse.UserReviewsResponseItem): Boolean {
+            return oldItem.reviewContent == newItem.reviewContent
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding =
-            ItemPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            RvItemReviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return Holder(binding)
     }
 
@@ -33,18 +35,17 @@ TourItemDiffCallback()
         }
     }
 
-    inner class Holder(private val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: GetPostsResponse) {
+    inner class Holder(private val binding: RvItemReviewBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: UserReviewsResponse.UserReviewsResponseItem) {
 //            Glide
 //                .with(binding.root.context)
 //                .load("")
 //                .into(binding.imageProfile)
 
             binding.apply {
-                textPostWriter.text = item.writerName
-                textPostTitle.text = item.postTitle
-                textListCount.text = "목록 ${item.placeListCount}개"
-                textPlaceCount.text = "춍 장소 ${item.placeCount}개"
+                tvReviewItemCreator.isGone = true
+                edReviewText.text = item.reviewContent
+                tvReviewScopeText.text = "목록 ${item.reviewRating}개"
             }
         }
     }

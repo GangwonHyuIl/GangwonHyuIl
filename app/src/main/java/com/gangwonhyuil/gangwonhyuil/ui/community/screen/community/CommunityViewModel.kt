@@ -27,7 +27,7 @@ class CommunityViewModel
             }
 
             viewModelScopeEH.launch {
-                _postItems.update { getPostItems() }
+                _postItems.update { getPostItems()}
             }
         }
     }

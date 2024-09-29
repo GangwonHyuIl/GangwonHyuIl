@@ -15,6 +15,6 @@ interface ProfileDataSource {
 
     @GET("user_reviews")
     suspend fun getUserReviews(
-        @Query("_user_idx") userIdx: String,
+        @Query("user_idx") userIdx: String,
     ): List<UserReviewsResponse>
 }

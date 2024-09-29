@@ -1,8 +1,9 @@
-package com.gangwonhyuil.gangwonhyuil.ui.profile.screen.myPosts
+package com.gangwonhyuil.gangwonhyuil.ui.profile.screen.profile
 
-import android.util.Log
 import com.gangwonhyuil.gangwonhyuil.data.response.profile.UserPostsResponse
+import com.gangwonhyuil.gangwonhyuil.data.response.profile.UserReviewsResponse
 import com.gangwonhyuil.gangwonhyuil.ui.profile.useCase.MyPostsUseCase
+import com.gangwonhyuil.gangwonhyuil.ui.profile.useCase.MyReviewsUseCase
 import com.gangwonhyuil.gangwonhyuil.util.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,11 +14,14 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MyPostsViewModel
+class ProfileViewModel
 @Inject
 constructor(
+    private val getMyReviewItems: MyReviewsUseCase,
     private val getMyPostItems: MyPostsUseCase,
-) : BaseViewModel() {
+    ) : BaseViewModel() {
+    private val _reviewItems = MutableStateFlow<UserReviewsResponse?>(null)
+    val reviewItems = _reviewItems.asStateFlow()
     private val _postItems = MutableStateFlow<UserPostsResponse?>(null)
     val postItems = _postItems.asStateFlow()
 
@@ -30,6 +34,10 @@ constructor(
 
         viewModelScopeEH.launch {
             _postItems.update { getMyPostItems(1) }
+        }
+
+        viewModelScopeEH.launch {
+            _reviewItems.update { getMyReviewItems(1) }
         }
     }
 }
